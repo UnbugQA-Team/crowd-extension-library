@@ -1,14 +1,14 @@
-(function(){"use strict";try{if(typeof document<"u"){var t=document.createElement("style");t.id="crowd-app-io-77.06667871405139",t.appendChild(document.createTextNode(".crowd-prompt{position:fixed}.crowd-prompt iframe{z-index:1100;background-color:transparent!important;background:transparent!important;border:none}.crowd-prompt .prompt-body-frame{width:470px;background:transparent;position:fixed;box-shadow:#00000029 0 5px 5px;-webkit-box-shadow:rgba(0,0,0,.16) 0px 5px 5px;-moz-box-shadow:rgba(0,0,0,.16) 0px 5px 6px;border-radius:10px}@media (max-width: 600px){.crowd-prompt .prompt-body-frame{width:100%!important}}.prompt-body-frame.prompt-panel-bottom-right{position:fixed;right:10px;bottom:10px}.prompt-body-frame.prompt-panel-bottom-left{position:fixed;left:10px;bottom:10px}.prompt-body-frame.prompt-panel-middle-left{position:fixed;left:-2px;top:50%;transform:translate(-50%) rotate(-90deg);transform-origin:50% 0%}.prompt-body-frame.prompt-panel-middle-right{position:fixed;top:50%;right:0;transform:rotate(-90deg) translate(50%,-50%);transform-origin:100% 50%}@media (max-width: 600px){.prompt-body-frame.prompt-panel-bottom-right{right:0;bottom:0}.prompt-body-frame.prompt-panel-bottom-left{left:0;bottom:0}.prompt-body-frame.prompt-panel-middle-left{left:0;transform:translateY(0);top:auto!important;bottom:0}.prompt-body-frame.prompt-panel-middle-right{right:0;transform:translateY(0);top:auto!important;bottom:0}}")),document.head.appendChild(t)}}catch(o){console.error("vite-plugin-css-injected-by-js",o)}})();
-var f = Object.defineProperty;
-var T = (t, e, o) => e in t ? f(t, e, { enumerable: !0, configurable: !0, writable: !0, value: o }) : t[e] = o;
-var a = (t, e, o) => (T(t, typeof e != "symbol" ? e + "" : e, o), o);
-const y = (t) => `${t}-${(/* @__PURE__ */ new Date()).getTime()}${Math.floor(Math.random() * 100)}`, h = () => {
+(function(){"use strict";try{if(typeof document<"u"){var t=document.createElement("style");t.id="crowd-app-io-60.353936476712434",t.appendChild(document.createTextNode(".crowd-prompt{position:fixed}.crowd-prompt iframe{z-index:1100;background-color:transparent!important;background:transparent!important;border:none}.crowd-prompt .prompt-body-frame{width:470px;background:transparent;position:fixed;box-shadow:#00000029 0 5px 5px;-webkit-box-shadow:rgba(0,0,0,.16) 0px 5px 5px;-moz-box-shadow:rgba(0,0,0,.16) 0px 5px 6px;border-radius:10px}@media (max-width: 600px){.crowd-prompt .prompt-body-frame{width:100%!important}}.prompt-body-frame.prompt-panel-bottom-right{position:fixed;right:10px;bottom:10px}.prompt-body-frame.prompt-panel-bottom-left{position:fixed;left:10px;bottom:10px}.prompt-body-frame.prompt-panel-middle-left{position:fixed;left:-2px;top:50%;transform:translate(-50%) rotate(-90deg);transform-origin:50% 0%}.prompt-body-frame.prompt-panel-middle-right{position:fixed;top:50%;right:0;transform:rotate(-90deg) translate(50%,-50%);transform-origin:100% 50%}@media (max-width: 600px){.prompt-body-frame.prompt-panel-bottom-right{right:0;bottom:0}.prompt-body-frame.prompt-panel-bottom-left{left:0;bottom:0}.prompt-body-frame.prompt-panel-middle-left{left:0;transform:translateY(0);top:auto!important;bottom:0}.prompt-body-frame.prompt-panel-middle-right{right:0;transform:translateY(0);top:auto!important;bottom:0}}")),document.head.appendChild(t)}}catch(o){console.error("vite-plugin-css-injected-by-js",o)}})();
+var I = Object.defineProperty;
+var f = (t, e, o) => e in t ? I(t, e, { enumerable: !0, configurable: !0, writable: !0, value: o }) : t[e] = o;
+var i = (t, e, o) => (f(t, typeof e != "symbol" ? e + "" : e, o), o);
+const T = (t) => `${t}-${(/* @__PURE__ */ new Date()).getTime()}${Math.floor(Math.random() * 100)}`, h = () => {
   const t = window.location.href, e = new URL(t);
   return {
     hostname: e.hostname,
     origin: e.origin
   };
-}, E = () => {
+}, y = () => {
   const t = navigator.userAgent;
   return /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(t) ? "Mobile" : /Tablet|iPad/i.test(t) ? "Tablet" : "Desktop";
 }, u = [
@@ -18,7 +18,7 @@ const y = (t) => `${t}-${(/* @__PURE__ */ new Date()).getTime()}${Math.floor(Mat
   { label: "Reshow after 1 week", value: "168_hours" }
 ];
 var r = /* @__PURE__ */ ((t) => (t.PromptLoaded = "PROMPTLOADED", t.GetPromptSize = "GETPROMPTSIZE", t.PromptResize = "PROMPTRESIZE", t.LastPromptUnmoderatedId = "LASTPROMPTUNMODERATEDID", t.RemovePrompt = "REMOVEPROMPT", t.CheckDeviceCompatibility = "CHECKDEVICECOMPATIBILITY", t.PaginateUnmoderatedTest = "PAGINATEUNMODERATEDTEST", t.StoreUserTestId = "STOREMODERATEDTESTID", t))(r || {});
-const w = "crowd-ignored-unmoderated-test", p = "crowd-answered-unmoderated-test", C = (t, e, o) => {
+const g = "crowd-ignored-unmoderated-test", p = "crowd-answered-unmoderated-test", b = (t, e, o) => {
   const n = /* @__PURE__ */ new Date();
   n.setTime(
     n.getTime() + o * 24 * 60 * 60 * 1e3
@@ -34,8 +34,8 @@ const w = "crowd-ignored-unmoderated-test", p = "crowd-answered-unmoderated-test
     const [d, l] = s.trim().split("=");
     d === t && (n = JSON.parse(decodeURIComponent(l)));
   }), n === null ? [] : n;
-}, D = (t, e) => {
-  const o = `${w}-${(/* @__PURE__ */ new Date()).getTime()}`, n = /* @__PURE__ */ new Date();
+}, E = (t, e) => {
+  const o = `${g}-${(/* @__PURE__ */ new Date()).getTime()}`, n = /* @__PURE__ */ new Date();
   n.setTime(
     n.getTime() + e * 24 * 60 * 60 * 1e3
   );
@@ -44,13 +44,13 @@ const w = "crowd-ignored-unmoderated-test", p = "crowd-answered-unmoderated-test
   )}; expires=${n.toUTCString()}; path=/`;
   document.cookie = s;
 }, R = () => {
-  const t = new RegExp(`^${w}`), o = document.cookie.split(";"), n = [];
+  const t = new RegExp(`^${g}`), o = document.cookie.split(";"), n = [];
   for (let s of o) {
-    const [d, l] = s.split("=").map((i) => i.trim());
+    const [d, l] = s.split("=").map((a) => a.trim());
     t.test(d) && n.push(l);
   }
   return n;
-}, g = (t) => {
+}, C = (t) => {
   const e = u.findIndex(
     (o) => o.value === t
   );
@@ -59,30 +59,30 @@ const w = "crowd-ignored-unmoderated-test", p = "crowd-answered-unmoderated-test
     return Number(n) === 0 ? 180 : Number(n) / 24;
   } else
     return 180;
-}, b = (t, e) => {
-  const o = window.location.href.replace(/\/$/, "");
-  return console.log(o), t === "start_with" ? o.startsWith(e) : t === "end_with" ? o.endsWith(e) : t === "contains" ? o.includes(e) : t === "exactly_matches" ? o === e : t === "is_not" ? o !== e : t === "matches_regex" ? new RegExp(e, "i").test(o) : !1;
-}, k = (t) => {
-  const e = E();
+}, D = (t, e) => {
+  const o = window.location.href.replace(/\/$/, ""), n = new URL(o);
+  return t === "start_with" ? n.pathname.startsWith(e) : t === "end_with" ? n.pathname.endsWith(e) : t === "contains" ? n.pathname.includes(e) : t === "exactly_matches" ? n.pathname === e : t === "is_not" ? n.pathname !== e : t === "matches_regex" ? new RegExp(e, "i").test(n.pathname) : !1;
+}, U = (t) => {
+  const e = y();
   return e === "Mobile" && t.mobile || e === "Desktop" && t.desktop || e === "Tablet" && t.tablet;
-}, U = async (t) => {
+}, k = async (t) => {
   if (t.visibilityOption === "ALLPAGES")
     return {
       position: t.promptPosition
     };
   if (t.visibilityOption === "SPECIFICPAGES") {
     const e = t.targetPages.filter(
-      (o) => b(o.optionName, o.optionValue)
+      (o) => D(o.optionName, o.optionValue)
     );
-    return console.log(e), k(t.deviceSupported) && e.length > 0 ? {
+    return U(t.deviceSupported) && e.length > 0 ? {
       position: t.promptPosition
     } : !1;
   } else
     return !1;
-}, m = "http://localhost:2222", M = "http://localhost:2222/crowd-extension/unmoderated-test", A = () => {
+}, m = "http://localhost:2222", M = "http://localhost:2222/crowd-extension/unmoderated-test", v = () => {
   if (window.CrowdApp && window.CrowdApp.crowd_token) {
     const t = window.CrowdApp.crowd_token;
-    new v(
+    new A(
       t,
       "prompt"
     ).setupWidgetContainer();
@@ -91,18 +91,21 @@ const w = "crowd-ignored-unmoderated-test", p = "crowd-answered-unmoderated-test
       "Crowd App installation failed. Please ensure that you are using the correct code snippet"
     );
 };
-class v {
+class A {
   constructor(e, o) {
+    i(this, "observer");
     //** Variable that holds the website integration token and it will be used across the class*/
-    a(this, "integrationToken", "");
-    a(this, "elementIdPrefix", "");
-    a(this, "deviceIncompatiblePrompt", []);
+    i(this, "integrationToken", "");
+    i(this, "elementIdPrefix", "");
+    i(this, "deviceIncompatiblePrompt", []);
     //** This class variable holds the currently displayed unmoderated test  */
-    a(this, "currentlyDisplayedUnmoderatedTest", null);
+    i(this, "currentlyDisplayedUnmoderatedTest", null);
     //** Generate IDs for the div container that will be used for the IFrames */
-    a(this, "promptPanelFrameId", y(`${this.elementIdPrefix}-body`));
-    a(this, "promptParentContainer", null);
-    this.integrationToken = e, this.elementIdPrefix = o;
+    i(this, "promptPanelFrameId", T(`${this.elementIdPrefix}-body`));
+    i(this, "promptParentContainer", null);
+    this.integrationToken = e, this.elementIdPrefix = o, this.observer = new MutationObserver(
+      this.handleMutationsObserver.bind(this)
+    );
   }
   /** Return all the iFrame reference  */
   getPromptElementsReference() {
@@ -119,6 +122,16 @@ class v {
     return {
       panelEndpoint: `${M}?token=${this.integrationToken}&domain=${h().hostname}&origin=${h().origin}`
     };
+  }
+  handleMutationsObserver(e) {
+    console.log("Mutation setup");
+    const o = document.querySelector("body");
+    for (let n of e)
+      console.log("Page loaded");
+    this.observer.observe(o, {
+      childList: !0,
+      subtree: !0
+    });
   }
   setupWidgetContainer() {
     this.promptParentContainer = document.createElement("div"), this.promptParentContainer.classList.add("crowd-prompt"), this.setupPromptPanelElement(), document.body.appendChild(this.promptParentContainer), window.addEventListener("message", this.handlePostMessageEvent.bind(this)), this.assignPromptPanelEndpoints();
@@ -195,16 +208,16 @@ class v {
         break;
       }
       case r.CheckDeviceCompatibility: {
-        U(e.data.payload).then((i) => {
+        k(e.data.payload).then((a) => {
           var c;
-          if (i) {
-            this.currentlyDisplayedUnmoderatedTest = e.data.payload, this.adjustPromptPanelPositionDimension("Position", i);
-            const I = {
+          if (a) {
+            this.currentlyDisplayedUnmoderatedTest = e.data.payload, this.adjustPromptPanelPositionDimension("Position", a);
+            const w = {
               eventType: r.GetPromptSize,
               payload: {}
             };
             (c = o.panelIframe.contentWindow) == null || c.postMessage(
-              I,
+              w,
               m
             );
           } else
@@ -224,22 +237,18 @@ class v {
       }
       case r.StoreUserTestId:
         if (e.data.payload.onCloseAction === "ANSWER") {
-          const i = P(
+          const a = P(
             p
           );
-          ((n = this.currentlyDisplayedUnmoderatedTest) == null ? void 0 : n.id) !== void 0 && (i.push((s = this.currentlyDisplayedUnmoderatedTest) == null ? void 0 : s.id), C(
+          ((n = this.currentlyDisplayedUnmoderatedTest) == null ? void 0 : n.id) !== void 0 && (a.push((s = this.currentlyDisplayedUnmoderatedTest) == null ? void 0 : s.id), b(
             p,
-            i,
+            a,
             30
           ), this.sendPaginationEventRequest(o.panelIframe));
         } else
-          e.data.payload.onCloseAction === "IGNORE" && ((d = this.currentlyDisplayedUnmoderatedTest) == null ? void 0 : d.id) !== void 0 && (console.log(
-            g(
-              this.currentlyDisplayedUnmoderatedTest.reshowPrompt
-            )
-          ), D(
+          e.data.payload.onCloseAction === "IGNORE" && ((d = this.currentlyDisplayedUnmoderatedTest) == null ? void 0 : d.id) !== void 0 && (E(
             (l = this.currentlyDisplayedUnmoderatedTest) == null ? void 0 : l.id,
-            g(
+            C(
               this.currentlyDisplayedUnmoderatedTest.reshowPrompt
             )
           ), this.sendPaginationEventRequest(o.panelIframe));
@@ -256,4 +265,4 @@ class v {
     this.promptParentContainer && this.promptParentContainer.remove();
   }
 }
-A();
+v();

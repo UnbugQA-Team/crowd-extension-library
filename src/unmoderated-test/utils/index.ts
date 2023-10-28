@@ -148,7 +148,7 @@ export const checkDeviceAndPageCompability = async (
       checkPageCompabilityForPrompt(item.optionName, item.optionValue)
     );
 
-    console.log(pageUrlCompability);
+    // console.log(pageUrlCompability);
 
     if (
       checkDeviceCompabilityForPrompt(data.deviceSupported) &&
