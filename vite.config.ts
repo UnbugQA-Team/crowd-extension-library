@@ -16,7 +16,7 @@ export default defineConfig({
       entry: path.resolve(__dirname, "src/main.ts"),
       name: "MyLib",
       // the proper extensions will be added
-      fileName: "crowd-app",
+      fileName: "crowd-extension",
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled

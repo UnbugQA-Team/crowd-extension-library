@@ -107,21 +107,21 @@ export const checkPageCompabilityForPrompt = (
 ) => {
   const currentUrl = window.location.href.replace(/\/$/, "");
 
-  console.log(currentUrl);
-
+  const currentUrlObject = new URL(currentUrl);
   if (specificPageOption === "start_with") {
-    return currentUrl.startsWith(specificPageValue);
+    return currentUrlObject.pathname.startsWith(specificPageValue);
+    // return currentUrl.startsWith(specificPageValue);
   } else if (specificPageOption === "end_with") {
-    return currentUrl.endsWith(specificPageValue);
+    return currentUrlObject.pathname.endsWith(specificPageValue);
   } else if (specificPageOption === "contains") {
-    return currentUrl.includes(specificPageValue);
+    return currentUrlObject.pathname.includes(specificPageValue);
   } else if (specificPageOption === "exactly_matches") {
-    return currentUrl === specificPageValue;
+    return currentUrlObject.pathname === specificPageValue;
   } else if (specificPageOption === "is_not") {
-    return currentUrl !== specificPageValue;
+    return currentUrlObject.pathname !== specificPageValue;
   } else if (specificPageOption === "matches_regex") {
     const regexPattern = new RegExp(specificPageValue, "i");
-    return regexPattern.test(currentUrl);
+    return regexPattern.test(currentUrlObject.pathname);
   } else {
     return false;
   }
