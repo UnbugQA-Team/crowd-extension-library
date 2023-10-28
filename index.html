@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + TS</title>
 
-    <script>
+    <!-- <script>
       window.CrowdApp = window.CrowdApp || {};
       CrowdApp.crowd_token =
         "MTQzMTcwZDMtNzYzNC00MGFkLWJmMTYtOGMxOGJiZTg3Yzg2OmIzMTE0YTg2LTFlMzktNDA3OC04NzI4LTM4NmVjNDlkY2MwMQ==";
@@ -21,6 +21,22 @@
         s.id = "crowd-app";
         var timestamp = new Date().getTime();
         s.src = "/src/main.ts?_=" + timestamp;
+        (d.head || d.body).appendChild(s);
+      })(document);
+    </script> -->
+
+    <script>
+      window.CrowdApp = window.CrowdApp || {};
+      CrowdApp.crowd_token =
+        "MTQzMTcwZDMtNzYzNC00MGFkLWJmMTYtOGMxOGJiZTg3Yzg2OmIzMTE0YTg2LTFlMzktNDA3OC04NzI4LTM4NmVjNDlkY2MwMQ==";
+      (function (d) {
+        var s = d.createElement("script");
+        s.type = "module";
+        var timestamp = new Date().getTime();
+        s.id = "crowd-io-application";
+        s.src =
+          "https://raw.githack.com/UnbugQA-Team/crowd-extension-library/main/dist/crowd-extension.js?v=" +
+          timestamp;
         (d.head || d.body).appendChild(s);
       })(document);
     </script>

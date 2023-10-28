@@ -23,10 +23,11 @@ import {
   storeUnmoderatedTestId,
 } from "./utils";
 
-const crowdOrigin = "http://localhost:2222"; // "https://staging.crowdapp.io";
+// const crowdOrigin = "http://localhost:2222"; // ;
+const crowdOrigin = "https://staging.crowdapp.io";
 
-// const baseURL = "https://staging.crowdapp.io/crowd-extension/unmoderated-test";
-const baseURL = "http://localhost:2222/crowd-extension/unmoderated-test";
+const baseURL = "https://staging.crowdapp.io/crowd-extension/unmoderated-test";
+// const baseURL = "http://localhost:2222/crowd-extension/unmoderated-test";
 
 export const initCrowdPrompt = () => {
   if ((window as any).CrowdApp && (window as any).CrowdApp.crowd_token) {
@@ -42,37 +43,6 @@ export const initCrowdPrompt = () => {
     );
   }
 };
-
-// const crowdTrack = ()=> {
-//   //get the current document link
-//   let old_href_link_crowd = document.location.href;
-//   const child_body_crowd = document.querySelector('body');
-//   const observer_crowd = new MutationObserver(mutations => {
-//     if(old_href_link_crowd !== document.location.href){
-//       old_href_link_crowd = document.location.href;
-//       const obj_crowd = JSON.parse(JSON.stringify(old_href_link_crowd));
-//       parent.postMessage(obj_crowd, 'https://staging.crowdapp.io', )
-//     }
-//   })
-//   observer_crowd.observe(child_body_crowd, { childList: true, subtree: true});
-// }
-// window.onload = crowdTrack;
-
-// const trackPageNavigation = () => {
-
-//   const bodyElement = document.querySelector('body') as HTMLBodyElement
-//   const handleMutationObservers = (mutations: MutationRecord[]) => {
-//     mutations.forEach(item => {
-//       item.
-//     })
-//   }
-//   const observer = new MutationObserver(handleMutationObservers.bind(this))
-
-//   observer.observe(bodyElement, {
-//     subtree: true,
-//     childList: true,
-//   })
-// }
 
 export class SetUpUnModeratedTestPrompt {
   private observer: MutationObserver;
