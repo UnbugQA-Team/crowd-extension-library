@@ -1,0 +1,10 @@
+.crowd-widget {
+  position: fixed;
+}
+
+.crowd-widget iframe {
+  /* display: flex; */
+  z-index: 1100;
+  background-color: transparent;
+  border: none;
+}

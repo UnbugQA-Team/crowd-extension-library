@@ -1,0 +1,77 @@
+.crowd-prompt {
+  position: fixed;
+}
+
+.crowd-prompt iframe {
+  /* display: flex; */
+  z-index: 1100;
+  background-color: transparent !important;
+  background: transparent !important;
+  border: none;
+}
+
+.crowd-prompt .prompt-body-frame {
+  width: 470px;
+  background: transparent;
+  position: fixed;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 5px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 5px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 6px;
+  border-radius: 10px 10px 10px 10px;
+}
+
+@media (max-width: 600px) {
+  .crowd-prompt .prompt-body-frame {
+    width: 100% !important;
+  }
+}
+
+.prompt-body-frame.prompt-panel-bottom-right {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+}
+.prompt-body-frame.prompt-panel-bottom-left {
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+}
+.prompt-body-frame.prompt-panel-middle-left {
+  position: fixed;
+  left: -2px;
+  top: 50%;
+  transform: translateX(-50%) rotate(-90deg);
+  transform-origin: 50% 0%;
+}
+
+.prompt-body-frame.prompt-panel-middle-right {
+  position: fixed;
+  top: 50%;
+  right: 0px;
+  transform: rotate(-90deg) translate(50%, -50%);
+  transform-origin: 100% 50%;
+}
+
+@media (max-width: 600px) {
+  .prompt-body-frame.prompt-panel-bottom-right {
+    right: 0px;
+    bottom: 0px;
+  }
+  .prompt-body-frame.prompt-panel-bottom-left {
+    left: 0px;
+    bottom: 0px;
+  }
+  .prompt-body-frame.prompt-panel-middle-left {
+    left: 0px;
+    transform: translateY(0%);
+    top: auto !important;
+    bottom: 0px;
+  }
+
+  .prompt-body-frame.prompt-panel-middle-right {
+    right: 0px;
+    transform: translateY(0%);
+    top: auto !important;
+    bottom: 0px;
+  }
+}
