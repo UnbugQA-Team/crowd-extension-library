@@ -1,4 +1,8 @@
-import { PromptReshowOptions, getDeviceType } from "../../utils";
+import {
+  PromptReshowOptions,
+  checkPageCompabilityTargetedPages,
+  getDeviceType,
+} from "../../utils";
 import { DeviceSupported, PromptDisplayRule } from "../model";
 
 export const unmoderatedTestPromptPrefix = "unmoderated-test";
@@ -101,32 +105,6 @@ export const getPeriodToReshowPrompt = (value: string) => {
   }
 };
 
-export const checkPageCompabilityForPrompt = (
-  specificPageOption: string,
-  specificPageValue: string
-) => {
-  const currentUrl = window.location.href.replace(/\/$/, "");
-
-  const currentUrlObject = new URL(currentUrl);
-  if (specificPageOption === "start_with") {
-    return currentUrlObject.pathname.startsWith(specificPageValue);
-    // return currentUrl.startsWith(specificPageValue);
-  } else if (specificPageOption === "end_with") {
-    return currentUrlObject.pathname.endsWith(specificPageValue);
-  } else if (specificPageOption === "contains") {
-    return currentUrlObject.pathname.includes(specificPageValue);
-  } else if (specificPageOption === "exactly_matches") {
-    return currentUrlObject.pathname === specificPageValue;
-  } else if (specificPageOption === "is_not") {
-    return currentUrlObject.pathname !== specificPageValue;
-  } else if (specificPageOption === "matches_regex") {
-    const regexPattern = new RegExp(specificPageValue, "i");
-    return regexPattern.test(currentUrlObject.pathname);
-  } else {
-    return false;
-  }
-};
-
 const checkDeviceCompabilityForPrompt = (supportedDevices: DeviceSupported) => {
   const visitorsDeviceType = getDeviceType();
   return (
@@ -145,7 +123,7 @@ export const checkDeviceAndPageCompability = async (
     };
   } else if (data.visibilityOption === "SPECIFICPAGES") {
     const pageUrlCompability = data.targetPages.filter((item) =>
-      checkPageCompabilityForPrompt(item.optionName, item.optionValue)
+      checkPageCompabilityTargetedPages(item.optionName, item.optionValue)
     );
 
     // console.log(pageUrlCompability);

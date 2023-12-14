@@ -1,0 +1,214 @@
+.crowd-widget {
+  position: fixed;
+}
+
+.crowd-widget iframe {
+  /* display: flex; */
+  z-index: 1100;
+  background-color: transparent;
+  border: none;
+}
+
+.crowd-widget .crowd-widget-body-frame {
+  width: 400px;
+  background: transparent;
+  position: fixed;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 5px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 5px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 6px;
+  border-radius: 10px 10px 10px 10px;
+}
+
+@media (max-width: 500px) {
+  .crowd-widget .crowd-widget-body-frame {
+    width: 100%;
+  }
+}
+.crowd-widget .crowd-widget-body-frame,
+.crowd-widget .crowd-widget-launcher-frame {
+  opacity: 1;
+  transition: visibility 0s, opacity 0.9s;
+}
+
+.crowd-widget-body-frame.widget-panel-bottom-right {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+}
+.crowd-widget-body-frame.widget-panel-bottom-left {
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+}
+.crowd-widget-body-frame.widget-panel-middle-left {
+  position: fixed;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+}
+
+.crowd-widget-body-frame.widget-panel-middle-right {
+  position: fixed;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+}
+
+.crowd-widget-launcher-frame.widget-launcher-bottom-right {
+  position: fixed;
+  right: 0px;
+  bottom: 0px;
+}
+.crowd-widget-launcher-frame.widget-launcher-bottom-left {
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+}
+.crowd-widget-launcher-frame.widget-launcher-middle-left {
+  position: fixed;
+  left: -2px;
+  top: 50%;
+  transform: translateX(-50%) rotate(-90deg);
+  transform-origin: 50% 0%;
+}
+
+.crowd-widget-launcher-frame.widget-launcher-middle-right {
+  position: fixed;
+  top: 50%;
+  right: 0px;
+  transform: rotate(-90deg) translate(50%, -50%);
+  transform-origin: 100% 50%;
+}
+
+@media (max-width: 500px) {
+  .crowd-widget-body-frame.widget-panel-bottom-right {
+    right: 0px;
+    bottom: 0px;
+  }
+  .crowd-widget-body-frame.widget-panel-bottom-left {
+    left: 0px;
+    bottom: 0px;
+  }
+  .crowd-widget-body-frame.widget-panel-middle-left {
+    left: 0px;
+    transform: translateY(0%);
+    top: auto !important;
+    bottom: 0px;
+  }
+
+  .crowd-widget-body-frame.widget-panel-middle-right {
+    right: 0px;
+    transform: translateY(0%);
+    top: auto !important;
+    bottom: 0px;
+  }
+}
+
+/** 
+    Styling for the widget controller
+  */
+.controller-frame {
+  position: fixed;
+  bottom: 15px;
+  left: calc(50% - 135px);
+  right: calc(50% - 135px);
+  padding: 0px 0px 0px 0px;
+  transform-origin: 50% 50%;
+  cursor: move;
+  background-color: white !important;
+  border-radius: 7px;
+  height: 60px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+}
+.controller-frame div {
+  height: 30px;
+  width: 30px;
+}
+.controller-frame svg {
+  height: 30px;
+  width: 30px;
+  stroke: black;
+}
+.controller-frame iframe {
+  position: relative;
+  height: 60px !important;
+  width: 250px !important;
+}
+
+/** 
+  
+  */
+.crowd-recording-frame {
+  padding: 10px;
+}
+.crowd-recording-frame .recording-frame {
+  position: fixed;
+  border: 5px solid red;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+/* Player Styles */
+body.show-crowd-player {
+  overflow: hidden !important;
+}
+.crowd-widget .record-player-frame {
+  position: fixed !important;
+  background: rgba(0, 0, 0, 0.72) !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  padding: 80px 100px !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 20px !important;
+}
+
+.crowd-widget .player-action {
+  width: 100% !important;
+  height: 50px !important;
+  min-height: 50px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 20px !important;
+}
+
+.crowd-widget .player-action button {
+  display: flex !important;
+  padding: 8px 16px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-width: 130px !important;
+  width: 130px !important;
+  border-radius: 4px !important;
+  color: #ffffff !important;
+  border: 1px solid #fff !important;
+}
+
+.crowd-widget .crowd-player-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 500px) {
+  .crowd-widget .record-player-frame {
+    padding: 40px 20px;
+  }
+}

@@ -4,7 +4,12 @@
  *  @class SetUpUnModeratedTestPrompt
  */
 
-import { generateId, getClientSiteDomain } from "../utils";
+import {
+  extensionBaseOriginUrl,
+  generateId,
+  getClientSiteDomain,
+  unmoderatedTestBaseUrl,
+} from "../utils";
 import {
   EventType,
   GetPromptSizeEvent,
@@ -23,11 +28,11 @@ import {
   storeUnmoderatedTestId,
 } from "./utils";
 
-// const crowdOrigin = "http://localhost:2222"; // ;
-const crowdOrigin = "https://staging.crowdapp.io";
+const crowdOrigin = extensionBaseOriginUrl; // ;
+//const crowdOrigin = "https://staging.crowdapp.io";
 
-const baseURL = "https://staging.crowdapp.io/crowd-extension/unmoderated-test";
-// const baseURL = "http://localhost:2222/crowd-extension/unmoderated-test";
+// const baseURL = "https://staging.crowdapp.io/crowd-extension/unmoderated-test";
+const baseURL = unmoderatedTestBaseUrl; // "http://localhost:2222/unmoderated-test";
 
 export const initCrowdPrompt = () => {
   if ((window as any).CrowdApp && (window as any).CrowdApp.crowd_token) {
