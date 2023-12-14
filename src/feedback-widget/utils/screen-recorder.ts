@@ -1,6 +1,7 @@
 import * as rrweb from "rrweb";
 import rrwebPlayer from "rrweb-player";
 import "rrweb-player/dist/style.css";
+import { ScreenRecordDoneEvent, WidgetEventType } from "../model";
 
 let screenRecordEvent = [] as any;
 let recorderObj = null as any;
@@ -65,15 +66,13 @@ export const saveScreenRecording = (
   widgetOrigin: string,
   panelFrame: HTMLIFrameElement
 ) => {
-  panelFrame.contentWindow?.postMessage(
-    {
-      eventType: "SCREENRECORDDONE",
-      body: {
-        recorderedEvent: screenRecordEvent,
-      },
+  const postMessageData: ScreenRecordDoneEvent = {
+    eventType: WidgetEventType.ScreenRecordDone,
+    payload: {
+      recorderedEvent: screenRecordEvent,
     },
-    widgetOrigin
-  );
+  };
+  panelFrame.contentWindow?.postMessage(postMessageData, widgetOrigin);
 };
 
 export const clearRecording = () => {

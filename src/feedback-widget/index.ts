@@ -6,6 +6,7 @@ import {
 } from "../utils";
 import {
   StartCountDownEvent,
+  WidgetDisplayRules,
   WidgetEventType,
   WidgetImpressionEvent,
   WidgetPostMessageEventData,
@@ -48,7 +49,7 @@ export const initCrowdWidget = () => {
  * @description The SetupCrowdWidget class provides functionality for creating and embedding crowd widget on client website.
  */
 class SetupCrowdWidget {
-  private observer: MutationObserver;
+  // private observer: MutationObserver;
   //** Variable that holds the website integration token and it will be used across the class*/
   private integrationToken: string = "";
 
@@ -56,9 +57,16 @@ class SetupCrowdWidget {
 
   private isWidgetPanelVisible: boolean = false;
 
+  private shouldHideLauncher: boolean = false;
+
+  private widgetDisplayRules: WidgetDisplayRules | null = null;
+
+  private onTriggerHashString: string = "#crowd-widget";
+
   private cookieLifetime: number = 0.5; // Hour(s)
 
   //** Generate IDs for the div container that will be used for the IFrames */
+  private widgetContainerId = generateId(`${this.elementIdPrefix}-container`);
   private panelFrameId = generateId(`${this.elementIdPrefix}-body`);
   private launcherFrameId = generateId(`${this.elementIdPrefix}-launcher`);
   private controllerFrameId = generateId(`${this.elementIdPrefix}-controller`);
@@ -81,13 +89,16 @@ class SetupCrowdWidget {
     this.integrationToken = integrationToken;
     this.elementIdPrefix = IdPrefix;
 
-    this.observer = new MutationObserver(
-      this.handleMutationsObserver.bind(this)
-    );
+    // this.observer = new MutationObserver(
+    //   this.handleMutationsObserver.bind(this)
+    // );
   }
 
   /** Return all the iFrame reference  */
   private getWidgetElementsReference() {
+    const widgetWrapper = document.getElementById(
+      this.widgetContainerId
+    ) as HTMLDivElement;
     const panelIframe = document.getElementById(
       this.panelFrameId
     ) as HTMLIFrameElement;
@@ -104,6 +115,7 @@ class SetupCrowdWidget {
       this.screenRecordPlayerFrameId
     ) as HTMLDivElement;
     return {
+      widgetWrapper,
       panelIframe,
       launcherIframe,
       controllerWapper,
@@ -125,7 +137,7 @@ class SetupCrowdWidget {
       }&domain=${getClientSiteDomain().hostname}&origin=${
         getClientSiteDomain().origin
       }`,
-      controllerEndpoint: `${baseURL}/recorder-controller&domain=${
+      controllerEndpoint: `${baseURL}/recorder-controller?domain=${
         getClientSiteDomain().hostname
       }&origin=${getClientSiteDomain().origin}`,
     };
@@ -135,6 +147,7 @@ class SetupCrowdWidget {
     //** Setup the necessary containers for the widget  */
     this.widgetParentContainer = document.createElement("div");
     this.widgetParentContainer.classList.add("crowd-widget");
+    this.widgetParentContainer.setAttribute("id", this.widgetContainerId);
     this.setupWidgetLauncherElement();
     this.setupWidgetPanelElement();
     this.setupWidgetControllerElement();
@@ -150,6 +163,12 @@ class SetupCrowdWidget {
       this.getWidgetElementsReference().controllerWapper
     );
     this.assignListenerToControlButton();
+
+    /* Listener for monitoring page navigation on the website */
+    window.addEventListener(
+      "popstate",
+      this.triggerWidgetOnLinkHash.bind(this)
+    );
   }
 
   //** Setup the iframe for the widget launcher */
@@ -287,10 +306,16 @@ class SetupCrowdWidget {
 
   private toggleWidgetVisibility() {
     const elementRefs = this.getWidgetElementsReference();
-    if (this.isWidgetPanelVisible) {
+    if (this.isWidgetPanelVisible && !this.shouldHideLauncher) {
+      /* Hide the panel and show the launcher when shouldHideLauncher is false */
       elementRefs.panelIframe.style.visibility = "hidden";
       elementRefs.launcherIframe.style.visibility = "visible";
+    } else if (this.isWidgetPanelVisible && this.shouldHideLauncher) {
+      /* Hide the panel and launcher when shouldHideLauncher is false */
+      elementRefs.panelIframe.style.visibility = "hidden";
+      elementRefs.launcherIframe.style.visibility = "hidden";
     } else {
+      /* Hide the launcher and show the panel */
       elementRefs.panelIframe.style.visibility = "visible";
       elementRefs.launcherIframe.style.visibility = "hidden";
       const postMessageData: StartCountDownEvent = {
@@ -325,6 +350,45 @@ class SetupCrowdWidget {
 
   /**
    * @memberof SetupCrowdWidget
+   * @method checkCompabilityForWidget
+   * @description
+   *
+   */
+  private checkCompabilityForWidget() {
+    const elementRefs = this.getWidgetElementsReference();
+
+    if (this.widgetDisplayRules === null) return;
+    checkDeviceAndPageCompabilityForWidget(this.widgetDisplayRules!).then(
+      (response) => {
+        if (response && !this.shouldHideLauncher) {
+          elementRefs.widgetWrapper.style.visibility = "visible";
+          setTimeout(() => {
+            this.adjustWidgetLauncherPositionDimension("Position", response);
+            if (!getUserIDSession(this.elementIdPrefix)) {
+              const postMessageData: WidgetImpressionEvent = {
+                eventType: WidgetEventType.WidgetImpression,
+                payload: {},
+              };
+              elementRefs.launcherIframe.contentWindow?.postMessage(
+                postMessageData,
+                crowdOrigin
+              );
+            }
+          }, response.showAfter);
+        } else if (response && this.shouldHideLauncher) {
+          // console.log("Hide launcher");
+          elementRefs.widgetWrapper.style.visibility = "visible";
+          elementRefs.launcherIframe.style.visibility = "hidden";
+        } else {
+          // this.clearWidgetOnDeactivation();
+          elementRefs.widgetWrapper.style.visibility = "hidden";
+        }
+      }
+    );
+  }
+
+  /**
+   * @memberof SetupCrowdWidget
    * @method listenAndExecutePostMessageInteration
    * @param event: MessageEvent<T>
    *
@@ -343,27 +407,9 @@ class SetupCrowdWidget {
           this.clearWidgetOnDeactivation();
           return;
         }
-        checkDeviceAndPageCompabilityForWidget(
-          event.data.payload.displayRules
-        ).then((response) => {
-          if (response) {
-            setTimeout(() => {
-              this.adjustWidgetLauncherPositionDimension("Position", response);
-              if (!getUserIDSession(this.elementIdPrefix)) {
-                const postMessageData: WidgetImpressionEvent = {
-                  eventType: WidgetEventType.WidgetImpression,
-                  payload: {},
-                };
-                elementRefs.launcherIframe.contentWindow?.postMessage(
-                  postMessageData,
-                  crowdOrigin
-                );
-              }
-            }, response.showAfter);
-          } else {
-            this.clearWidgetOnDeactivation();
-          }
-        });
+        this.shouldHideLauncher = event.data.payload.hideLauncherButton;
+        this.widgetDisplayRules = event.data.payload.displayRules;
+        this.checkCompabilityForWidget();
         break;
       }
       case WidgetEventType.LauncherResize: {
@@ -380,6 +426,7 @@ class SetupCrowdWidget {
       case WidgetEventType.PanelLoaded: {
         this.iframesLoaded.panelFrame = true;
         this.adjustWidgetPanelPositionDimension("Position", event.data.payload);
+        this.triggerWidgetOnLinkHash();
         break;
       }
       case WidgetEventType.PanelResize: {
@@ -395,33 +442,54 @@ class SetupCrowdWidget {
           this.assignWidgetControllerEndpoints();
           this.iframesLoaded.controllerFrame = true;
         }
+        break;
+      }
+      case WidgetEventType.StartScreenRecord: {
+        startBugTrackingScreenRecording();
+        this.toggleCrowdWidgetControllerVisibility("STARTRECORDING");
+        break;
+      }
+      case WidgetEventType.StopScreenRecord: {
+        stopBugTrackingScreenRecording();
+        elementRefs.controllerWapper.style.visibility = "hidden";
+        this.toggleCrowdWidgetControllerVisibility("STOPRECORDING");
       }
     }
-
-    // if (event.data.eventType === "STARTSCREENRECORD") {
-    //   startBugTrackingScreenRecording();
-    //   this.toggleCrowdWidgetControllerVisibility("STARTRECORDING");
-    // } else if (event.data.eventType === "STOPSCREENRECORD") {
-    //   stopBugTrackingScreenRecording();
-    //   elementRefs.controllerWapper.style.visibility = "hidden";
-    //   this.toggleCrowdWidgetControllerVisibility("STOPRECORDING");
-    // }
   }
 
-  private handleMutationsObserver(mutations: MutationRecord[]) {
-    console.log("Mutation setup");
-    const bodyElement = document.querySelector("body") as HTMLBodyElement;
-    for (let _mutation of mutations) {
-      console.log("Page loaded");
-      // if (mutation.addedNodes.length) {
-      //   console.log("New content added");
-      // }
+  /**
+   * @memberof SetupCrowdWidget
+   * @method triggerWidgetOnLinkHash
+   * @description
+   *
+   */
+  private triggerWidgetOnLinkHash() {
+    this.checkCompabilityForWidget();
+    const hashString = window.location.hash;
+    if (hashString !== this.onTriggerHashString && this.isWidgetPanelVisible) {
+      this.toggleWidgetVisibility();
+    } else if (
+      hashString == this.onTriggerHashString &&
+      !this.isWidgetPanelVisible
+    ) {
+      this.toggleWidgetVisibility();
     }
-    this.observer.observe(bodyElement, {
-      childList: true,
-      subtree: true,
-    });
   }
+
+  // private handleMutationsObserver(mutations: MutationRecord[]) {
+  //   console.log("Mutation setup");
+  //   const bodyElement = document.querySelector("body") as HTMLBodyElement;
+  //   for (let _mutation of mutations) {
+  //     console.log("Page loaded");
+  //     // if (mutation.addedNodes.length) {
+  //     //   console.log("New content added");
+  //     // }
+  //   }
+  //   this.observer.observe(bodyElement, {
+  //     childList: true,
+  //     subtree: true,
+  //   });
+  // }
 
   clearWidgetOnDeactivation() {
     this.widgetParentContainer.remove();

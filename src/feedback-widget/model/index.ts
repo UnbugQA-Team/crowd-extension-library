@@ -20,14 +20,17 @@ export type WidgetPostMessageEventData =
   | PanelLoadedEvent
   | OpenPanelEvent
   | PanelResizeEvent
-  | StartCountDownEvent;
+  | StartCountDownEvent
+  | ScreenRecordDoneEvent
+  | StartScreenRecordEvent
+  | StopScreenRecordEvent;
 
 export interface LauncherLoadedEvent {
   eventType: WidgetEventType.LauncherLoaded;
   payload: {
     displayRules: WidgetDisplayRules;
-    showFeedbackWidget: Boolean;
-    hideLauncherButton: Boolean;
+    showFeedbackWidget: boolean;
+    hideLauncherButton: boolean;
   };
 }
 
@@ -71,6 +74,23 @@ export interface PanelResizeEvent {
 
 export interface StartCountDownEvent {
   eventType: WidgetEventType.StartCountDown;
+  payload: {};
+}
+
+export interface ScreenRecordDoneEvent {
+  eventType: WidgetEventType.ScreenRecordDone;
+  payload: {
+    recorderedEvent: any[];
+  };
+}
+
+export interface StartScreenRecordEvent {
+  eventType: WidgetEventType.StartScreenRecord;
+  payload: {};
+}
+
+export interface StopScreenRecordEvent {
+  eventType: WidgetEventType.StopScreenRecord;
   payload: {};
 }
 
