@@ -8,7 +8,9 @@ import {
   extensionBaseOriginUrl,
   generateId,
   getClientSiteDomain,
+  getExtensionOriginUrl,
   unmoderatedTestBaseUrl,
+  urlPathQuery,
 } from "../utils";
 import {
   EventType,
@@ -90,9 +92,7 @@ export class SetUpUnModeratedTestPrompt {
    */
   private getwidgetFrameEndpoint() {
     return {
-      panelEndpoint: `${baseURL}?token=${this.integrationToken}&domain=${
-        getClientSiteDomain().hostname
-      }&origin=${getClientSiteDomain().origin}`,
+      panelEndpoint: `${baseURL}/${urlPathQuery(this.integrationToken)}`,
     };
   }
 

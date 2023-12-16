@@ -2,6 +2,8 @@ import {
   extensionBaseOriginUrl,
   generateId,
   getClientSiteDomain,
+  getExtensionOriginUrl,
+  urlPathQuery,
   widgetBaseUrl,
 } from "../utils";
 import {
@@ -128,18 +130,15 @@ class SetupCrowdWidget {
    * This private method provides the endpoint for each of the iframe containers that will be created
    */
   private getwidgetFrameEndpoint() {
+    // const urlQuery = urlPathQuery();
     return {
-      panelEndpoint: `${baseURL}?token=${this.integrationToken}&domain=${
-        getClientSiteDomain().hostname
-      }&origin=${getClientSiteDomain().origin}`,
-      launcherEndpoint: `${baseURL}/launcher?token=${
+      panelEndpoint: `${baseURL}/${urlPathQuery(this.integrationToken)}`,
+      launcherEndpoint: `${baseURL}/launcher/${urlPathQuery(
         this.integrationToken
-      }&domain=${getClientSiteDomain().hostname}&origin=${
-        getClientSiteDomain().origin
-      }`,
-      controllerEndpoint: `${baseURL}/recorder-controller?domain=${
-        getClientSiteDomain().hostname
-      }&origin=${getClientSiteDomain().origin}`,
+      )}`,
+      controllerEndpoint: `${baseURL}/recorder-controller/${urlPathQuery(
+        this.integrationToken
+      )}`,
     };
   }
 
@@ -228,6 +227,7 @@ class SetupCrowdWidget {
    *  @description This method is responsbile for injecting a url to the widget panel and launcher
    */
   private assignWidgetPanelAndLauncherEndpoints() {
+    console.log(this.getwidgetFrameEndpoint().launcherEndpoint);
     const elementRefs = this.getWidgetElementsReference();
     if (
       elementRefs.launcherIframe !== null &&
@@ -464,15 +464,25 @@ class SetupCrowdWidget {
    *
    */
   private triggerWidgetOnLinkHash() {
-    this.checkCompabilityForWidget();
-    const hashString = window.location.hash;
-    if (hashString !== this.onTriggerHashString && this.isWidgetPanelVisible) {
-      this.toggleWidgetVisibility();
-    } else if (
-      hashString == this.onTriggerHashString &&
-      !this.isWidgetPanelVisible
-    ) {
-      this.toggleWidgetVisibility();
+    try {
+      this.checkCompabilityForWidget();
+      const hashString = window.location.hash;
+      if (
+        hashString !== this.onTriggerHashString &&
+        this.isWidgetPanelVisible
+      ) {
+        this.toggleWidgetVisibility();
+      } else if (
+        hashString == this.onTriggerHashString &&
+        !this.isWidgetPanelVisible
+      ) {
+        this.toggleWidgetVisibility();
+      }
+    } catch {
+      window.removeEventListener(
+        "popstate",
+        this.triggerWidgetOnLinkHash.bind(this)
+      );
     }
   }
 
@@ -492,6 +502,10 @@ class SetupCrowdWidget {
   // }
 
   clearWidgetOnDeactivation() {
+    // window.removeEventListener(
+    //   "message",
+    //   this.listenAndExecutePostMessageInteration.bind(this)
+    // );
     this.widgetParentContainer.remove();
   }
 }

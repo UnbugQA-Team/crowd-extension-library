@@ -1,11 +1,12 @@
 const devCrowdOrigin = "http://localhost:2222"; // ;
-const prodCrowdOrigin = "https://staging.crowdapp.io";
+const prodCrowdOrigin = "https://extension.crowdapp.io";
 
 // const baseURL = "https://staging.crowdapp.io/crowd-extension/unmoderated-test";
 // const devBaseURL = "http://localhost:2222/unmoderated-test";
 
-export const extensionBaseOriginUrl =
-  import.meta.env.MODE === "development" ? devCrowdOrigin : prodCrowdOrigin;
+export const extensionBaseOriginUrl = import.meta.env.DEV
+  ? devCrowdOrigin
+  : prodCrowdOrigin;
 
 export const unmoderatedTestBaseUrl = `${extensionBaseOriginUrl}/unmoderated-test`;
 export const widgetBaseUrl = `${extensionBaseOriginUrl}/widget`;
@@ -14,13 +15,38 @@ export const generateId = (suffix: string): string => {
   return `${suffix}-${new Date().getTime()}${Math.floor(Math.random() * 100)}`;
 };
 
+export const getExtensionOriginUrl = (): string => {
+  if ((window as any).CrowdApp && (window as any).CrowdApp.environment) {
+    const crowd_environment = (window as any).CrowdApp.environment;
+    return crowd_environment;
+  } else if ((window as any).CrowdApp) {
+    return "production";
+  } else {
+    return "production";
+  }
+};
+
 export const getClientSiteDomain = () => {
   const currentURL = window.location.href;
   const url = new URL(currentURL);
   return {
-    hostname: url.hostname,
-    origin: url.origin,
+    hostname: encodeURIComponent(url.hostname),
+    host: encodeURIComponent(url.host),
+    protocol: encodeURIComponent(url.protocol),
+    origin: encodeURIComponent(url.origin),
   };
+};
+
+export const urlPathQuery = (integrationToken: string) => {
+  return `?token=${encodeURIComponent(
+    integrationToken
+  )}&domain=${encodeURIComponent(
+    getClientSiteDomain().hostname
+  )}&host_origin=${encodeURIComponent(
+    getClientSiteDomain().host
+  )}&protocol=${encodeURIComponent(
+    getClientSiteDomain().protocol
+  )}&env=${getExtensionOriginUrl()}`;
 };
 
 export const getDeviceType = () => {

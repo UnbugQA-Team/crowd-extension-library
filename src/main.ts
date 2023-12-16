@@ -3,5 +3,6 @@ import "./assets/widget.css";
 import { initCrowdPrompt } from "./unmoderated-test";
 import { initCrowdWidget } from "./feedback-widget";
 
-// initCrowdPrompt();
+console.log(import.meta.env.DEV);
+initCrowdPrompt();
 initCrowdWidget();
