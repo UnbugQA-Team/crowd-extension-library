@@ -95,10 +95,9 @@ export class SetUpUnModeratedTestPrompt {
   }
 
   private handleMutationsObserver(mutations: MutationRecord[]) {
-    console.log("Mutation setup");
     const bodyElement = document.querySelector("body") as HTMLBodyElement;
     for (let _mutation of mutations) {
-      console.log("Page loaded");
+      // console.log("Page loaded");
       // if (mutation.addedNodes.length) {
       //   console.log("New content added");
       // }

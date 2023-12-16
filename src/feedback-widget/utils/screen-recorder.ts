@@ -34,9 +34,9 @@ const generateHeightForPlayer = () => {
     //   computedStyle.getPropertyValue("padding-left"),
     //   10
     // );
-    console.log(windowHeight);
+
     const playerHeight = windowHeight - (paddingTop * 2 + 60 + 20);
-    console.log(playerHeight);
+
     return playerHeight;
   }
   return 0;
