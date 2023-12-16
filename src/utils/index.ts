@@ -1,9 +1,6 @@
 const devCrowdOrigin = "http://localhost:2222"; // ;
 const prodCrowdOrigin = "https://extension.crowdapp.io";
 
-// const baseURL = "https://staging.crowdapp.io/crowd-extension/unmoderated-test";
-// const devBaseURL = "http://localhost:2222/unmoderated-test";
-
 export const extensionBaseOriginUrl = import.meta.env.DEV
   ? devCrowdOrigin
   : prodCrowdOrigin;

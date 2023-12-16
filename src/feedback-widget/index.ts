@@ -1,8 +1,6 @@
 import {
   extensionBaseOriginUrl,
   generateId,
-  getClientSiteDomain,
-  getExtensionOriginUrl,
   urlPathQuery,
   widgetBaseUrl,
 } from "../utils";

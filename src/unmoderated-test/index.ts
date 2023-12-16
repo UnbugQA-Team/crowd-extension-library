@@ -7,8 +7,6 @@
 import {
   extensionBaseOriginUrl,
   generateId,
-  getClientSiteDomain,
-  getExtensionOriginUrl,
   unmoderatedTestBaseUrl,
   urlPathQuery,
 } from "../utils";
