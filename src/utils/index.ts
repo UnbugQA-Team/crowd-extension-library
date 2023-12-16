@@ -5,8 +5,8 @@ export const extensionBaseOriginUrl = import.meta.env.DEV
   ? devCrowdOrigin
   : prodCrowdOrigin;
 
-export const unmoderatedTestBaseUrl = `${extensionBaseOriginUrl}/unmoderated-test`;
-export const widgetBaseUrl = `${extensionBaseOriginUrl}/widget`;
+export const unmoderatedTestBaseUrl = `${extensionBaseOriginUrl}/extension/unmoderated-test`;
+export const widgetBaseUrl = `${extensionBaseOriginUrl}/extension/widget`;
 
 export const generateId = (suffix: string): string => {
   return `${suffix}-${new Date().getTime()}${Math.floor(Math.random() * 100)}`;
