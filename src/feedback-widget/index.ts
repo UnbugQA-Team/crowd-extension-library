@@ -53,7 +53,7 @@ class SetupCrowdWidget {
   //** Variable that holds the website integration token and it will be used across the class*/
   private integrationToken: string = "";
 
-  private elementIdPrefix: string = "";
+  private elementIdPrefix: string = "crowd-widget";
 
   private isWidgetPanelVisible: boolean = false;
 
@@ -87,6 +87,7 @@ class SetupCrowdWidget {
 
   constructor(integrationToken: string, IdPrefix: string) {
     this.integrationToken = integrationToken;
+    console.log(IdPrefix);
     this.elementIdPrefix = IdPrefix;
 
     // this.observer = new MutationObserver(
@@ -225,7 +226,6 @@ class SetupCrowdWidget {
    *  @description This method is responsbile for injecting a url to the widget panel and launcher
    */
   private assignWidgetPanelAndLauncherEndpoints() {
-    console.log(this.getwidgetFrameEndpoint().launcherEndpoint);
     const elementRefs = this.getWidgetElementsReference();
     if (
       elementRefs.launcherIframe !== null &&
@@ -483,21 +483,6 @@ class SetupCrowdWidget {
       );
     }
   }
-
-  // private handleMutationsObserver(mutations: MutationRecord[]) {
-  //   console.log("Mutation setup");
-  //   const bodyElement = document.querySelector("body") as HTMLBodyElement;
-  //   for (let _mutation of mutations) {
-  //     console.log("Page loaded");
-  //     // if (mutation.addedNodes.length) {
-  //     //   console.log("New content added");
-  //     // }
-  //   }
-  //   this.observer.observe(bodyElement, {
-  //     childList: true,
-  //     subtree: true,
-  //   });
-  // }
 
   clearWidgetOnDeactivation() {
     // window.removeEventListener(
