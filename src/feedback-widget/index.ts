@@ -87,7 +87,6 @@ class SetupCrowdWidget {
 
   constructor(integrationToken: string, IdPrefix: string) {
     this.integrationToken = integrationToken;
-    console.log(IdPrefix);
     this.elementIdPrefix = IdPrefix;
 
     // this.observer = new MutationObserver(
