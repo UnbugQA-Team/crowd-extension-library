@@ -95,10 +95,9 @@ export class SetUpUnModeratedTestPrompt {
   }
 
   private handleMutationsObserver(mutations: MutationRecord[]) {
-    console.log("Mutation setup");
     const bodyElement = document.querySelector("body") as HTMLBodyElement;
     for (let _mutation of mutations) {
-      console.log("Page loaded");
+      // console.log("Page loaded");
       // if (mutation.addedNodes.length) {
       //   console.log("New content added");
       // }
@@ -116,6 +115,12 @@ export class SetUpUnModeratedTestPrompt {
     document.body.appendChild(this.promptParentContainer);
     window.addEventListener("message", this.handlePostMessageEvent.bind(this));
     this.assignPromptPanelEndpoints();
+
+    /* Listener for monitoring page navigation on the website */
+    window.addEventListener(
+      "popstate",
+      this.triggerPromptOnLinkHash.bind(this)
+    );
   }
 
   /**
@@ -197,6 +202,40 @@ export class SetUpUnModeratedTestPrompt {
     promptIframe.contentWindow?.postMessage(postMessageData, crowdOrigin);
   }
 
+  /**
+   * @memberof SetUpUnModeratedTestPrompt
+   * @method checkCompabilityForPrompt
+   * @description
+   *
+   */
+  private checkCompabilityForPrompt() {
+    const elementRefs = this.getPromptElementsReference();
+
+    if (this.currentlyDisplayedUnmoderatedTest === null) return;
+    checkDeviceAndPageCompability(this.currentlyDisplayedUnmoderatedTest!).then(
+      (response) => {
+        if (response) {
+          // this.currentlyDisplayedUnmoderatedTest = event.data.payload as PromptDisplayRule;
+          this.adjustPromptPanelPositionDimension("Position", response);
+          const postMessageData: GetPromptSizeEvent = {
+            eventType: EventType.GetPromptSize,
+            payload: {},
+          };
+          elementRefs.panelIframe.contentWindow?.postMessage(
+            postMessageData,
+            crowdOrigin
+          );
+        } else {
+          this.deviceIncompatiblePrompt.push(
+            this.currentlyDisplayedUnmoderatedTest!.id
+          );
+          this.sendPaginationEventRequest(elementRefs.panelIframe);
+          // this.clearPromptOnDeactivation();
+        }
+      }
+    );
+  }
+
   private listenAndExecutePostMessageInteration(
     event: MessageEvent<PostMessageEventData>
   ) {
@@ -211,27 +250,8 @@ export class SetUpUnModeratedTestPrompt {
         break;
       }
       case EventType.CheckDeviceCompatibility: {
-        checkDeviceAndPageCompability(event.data.payload).then((response) => {
-          if (response) {
-            this.currentlyDisplayedUnmoderatedTest = event.data
-              .payload as PromptDisplayRule;
-            this.adjustPromptPanelPositionDimension("Position", response);
-            const postMessageData: GetPromptSizeEvent = {
-              eventType: EventType.GetPromptSize,
-              payload: {},
-            };
-            elementRefs.panelIframe.contentWindow?.postMessage(
-              postMessageData,
-              crowdOrigin
-            );
-          } else {
-            this.deviceIncompatiblePrompt.push(
-              (event.data.payload as PromptDisplayRule).id
-            );
-            this.sendPaginationEventRequest(elementRefs.panelIframe);
-            // this.clearPromptOnDeactivation();
-          }
-        });
+        this.currentlyDisplayedUnmoderatedTest = event.data.payload;
+        this.checkCompabilityForPrompt();
         break;
       }
       case EventType.PromptResize: {
@@ -270,6 +290,23 @@ export class SetUpUnModeratedTestPrompt {
           this.sendPaginationEventRequest(elementRefs.panelIframe);
         }
       }
+    }
+  }
+
+  /**
+   * @memberof SetUpUnModeratedTestPrompt
+   * @method triggerPromptOnLinkHash
+   * @description
+   *
+   */
+  private triggerPromptOnLinkHash() {
+    try {
+      this.checkCompabilityForPrompt();
+    } catch {
+      window.removeEventListener(
+        "popstate",
+        this.triggerPromptOnLinkHash.bind(this)
+      );
     }
   }
 
