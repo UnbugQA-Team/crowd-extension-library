@@ -1,4 +1,4 @@
-const devCrowdOrigin = "http://localhost:2222"; // ;
+const devCrowdOrigin = "http://localhost:2222";
 const prodCrowdOrigin = "https://extension.crowdapp.io";
 
 export const extensionBaseOriginUrl = import.meta.env.DEV

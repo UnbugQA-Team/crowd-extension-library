@@ -24,11 +24,9 @@ import {
   stopBugTrackingScreenRecording,
 } from "./utils/screen-recorder";
 
-const crowdOrigin = extensionBaseOriginUrl; // ;
-//const crowdOrigin = "https://staging.crowdapp.io";
+const crowdOrigin = extensionBaseOriginUrl;
 
-// const baseURL = "https://staging.crowdapp.io/crowd-extension/unmoderated-test";
-const baseURL = widgetBaseUrl; // "http://localhost:2222/unmoderated-test";
+const baseURL = widgetBaseUrl;
 
 export const initCrowdWidget = () => {
   if ((window as any).CrowdApp && (window as any).CrowdApp.crowd_token) {
@@ -67,6 +65,9 @@ class SetupCrowdWidget {
 
   //** Generate IDs for the div container that will be used for the IFrames */
   private widgetContainerId = generateId(`${this.elementIdPrefix}-container`);
+  private panelContainerFrameId = generateId(
+    `${this.elementIdPrefix}-container`
+  );
   private panelFrameId = generateId(`${this.elementIdPrefix}-body`);
   private launcherFrameId = generateId(`${this.elementIdPrefix}-launcher`);
   private controllerFrameId = generateId(`${this.elementIdPrefix}-controller`);
@@ -99,6 +100,9 @@ class SetupCrowdWidget {
     const widgetWrapper = document.getElementById(
       this.widgetContainerId
     ) as HTMLDivElement;
+    const panelContainerElement = document.getElementById(
+      this.panelContainerFrameId
+    ) as HTMLDivElement;
     const panelIframe = document.getElementById(
       this.panelFrameId
     ) as HTMLIFrameElement;
@@ -116,6 +120,7 @@ class SetupCrowdWidget {
     ) as HTMLDivElement;
     return {
       widgetWrapper,
+      panelContainerElement,
       panelIframe,
       launcherIframe,
       controllerWapper,
@@ -151,6 +156,12 @@ class SetupCrowdWidget {
     this.setupWidgetRecordPlayerElement();
     document.body.appendChild(this.widgetParentContainer);
 
+    document
+      .getElementById("close-widget-panel-btn")
+      ?.addEventListener("click", () => {
+        this.toggleWidgetVisibility();
+      });
+
     window.addEventListener("message", (event) => {
       if (event.origin !== crowdOrigin) return;
       this.listenAndExecutePostMessageInteration(event);
@@ -176,7 +187,9 @@ class SetupCrowdWidget {
 
   //** Setup the iframe for the widget panel */
   private setupWidgetPanelElement() {
-    const widgetPanelIframe = `<iframe id="${this.panelFrameId}" frameborder="0" class="crowd-widget-body-frame" allowtransparency="true" style="height: 0; visibility: hidden;"></iframe>`;
+    const widgetPanelIframe = `<div id="${this.panelContainerFrameId}" class="crowd-widget-body-frame" style="height: 0; visibility: hidden;"> <button id="close-widget-panel-btn" class="close-widget-panel-btn"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 12L12 4M4 4L12 12" stroke="#F9FAFB" stroke-width="1.13" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg></button> <iframe id="${this.panelFrameId}" frameborder="0" class="crowd-widget-body-iframe" allowtransparency="true" style="height: 0;"></iframe></div>`;
     this.widgetParentContainer.innerHTML += widgetPanelIframe;
   }
 
@@ -296,8 +309,15 @@ class SetupCrowdWidget {
       elementRefs.panelIframe.classList.add(
         `widget-panel-${eventData.position!.toLowerCase().split("_").join("-")}`
       );
+      elementRefs.panelContainerElement.classList.add(
+        `widget-panel-container-${eventData
+          .position!.toLowerCase()
+          .split("_")
+          .join("-")}`
+      );
     } else if (action === "Resize") {
       elementRefs.panelIframe.style.height = `${eventData.height}px`;
+      elementRefs.panelContainerElement.style.height = `${eventData.height}px`;
     }
   }
 
@@ -305,15 +325,15 @@ class SetupCrowdWidget {
     const elementRefs = this.getWidgetElementsReference();
     if (this.isWidgetPanelVisible && !this.shouldHideLauncher) {
       /* Hide the panel and show the launcher when shouldHideLauncher is false */
-      elementRefs.panelIframe.style.visibility = "hidden";
+      elementRefs.panelContainerElement.style.visibility = "hidden";
       elementRefs.launcherIframe.style.visibility = "visible";
     } else if (this.isWidgetPanelVisible && this.shouldHideLauncher) {
       /* Hide the panel and launcher when shouldHideLauncher is false */
-      elementRefs.panelIframe.style.visibility = "hidden";
+      elementRefs.panelContainerElement.style.visibility = "hidden";
       elementRefs.launcherIframe.style.visibility = "hidden";
     } else {
       /* Hide the launcher and show the panel */
-      elementRefs.panelIframe.style.visibility = "visible";
+      elementRefs.panelContainerElement.style.visibility = "visible";
       elementRefs.launcherIframe.style.visibility = "hidden";
       const postMessageData: StartCountDownEvent = {
         eventType: WidgetEventType.StartCountDown,
@@ -484,10 +504,6 @@ class SetupCrowdWidget {
   }
 
   clearWidgetOnDeactivation() {
-    // window.removeEventListener(
-    //   "message",
-    //   this.listenAndExecutePostMessageInteration.bind(this)
-    // );
     this.widgetParentContainer.remove();
   }
 }

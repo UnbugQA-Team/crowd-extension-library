@@ -60,6 +60,11 @@ export class SetUpUnModeratedTestPrompt {
   //** This class variable holds the currently displayed unmoderated test  */
   private currentlyDisplayedUnmoderatedTest: PromptDisplayRule | null = null;
 
+  //** Generate IDs for the div container that will be used to enclose IFrames */
+  private promptPanelContainerFrameId = generateId(
+    `${this.elementIdPrefix}-body-container`
+  );
+
   //** Generate IDs for the div container that will be used for the IFrames */
   private promptPanelFrameId = generateId(`${this.elementIdPrefix}-body`);
 
@@ -76,11 +81,15 @@ export class SetUpUnModeratedTestPrompt {
 
   /** Return all the iFrame reference  */
   private getPromptElementsReference() {
+    const panelContainer = document.getElementById(
+      this.promptPanelContainerFrameId
+    ) as HTMLDivElement;
     const panelIframe = document.getElementById(
       this.promptPanelFrameId
     ) as HTMLIFrameElement;
 
     return {
+      panelContainer,
       panelIframe,
     };
   }
@@ -116,6 +125,20 @@ export class SetUpUnModeratedTestPrompt {
     window.addEventListener("message", this.handlePostMessageEvent.bind(this));
     this.assignPromptPanelEndpoints();
 
+    document
+      .getElementById("close-prompt-panel-btn")
+      ?.addEventListener("click", () => {
+        storeIgnoredUnmoderatedTestId(
+          this.currentlyDisplayedUnmoderatedTest!.id,
+          getPeriodToReshowPrompt(
+            this.currentlyDisplayedUnmoderatedTest!.reshowPrompt
+          )
+        );
+        this.sendPaginationEventRequest(
+          this.getPromptElementsReference().panelIframe
+        );
+      });
+
     /* Listener for monitoring page navigation on the website */
     window.addEventListener(
       "popstate",
@@ -141,7 +164,9 @@ export class SetUpUnModeratedTestPrompt {
    * @description Setup the iframe for the prompt panel
    */
   private setupPromptPanelElement() {
-    const promptPanelIframe = `<iframe id="${this.promptPanelFrameId}" frameborder="0" class="prompt-body-frame" allowtransparency="true" style="height: 0;"></iframe>`;
+    const promptPanelIframe = `<div id="${this.promptPanelContainerFrameId}" class="prompt-body-frame" style="height: 0; visibility: hidden;"> <button id="close-prompt-panel-btn" class="close-prompt-panel-btn"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 12L12 4M4 4L12 12" stroke="#F9FAFB" stroke-width="1.13" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg></button><iframe id="${this.promptPanelFrameId}" frameborder="0" class="prompt-body-iframe" allowtransparency="true" style="height: 0;"></iframe></div>`;
     this.promptParentContainer.innerHTML += promptPanelIframe;
   }
 
@@ -174,9 +199,18 @@ export class SetUpUnModeratedTestPrompt {
       elementRefs.panelIframe.classList.add(
         `prompt-panel-${eventData.position.toLowerCase().split("_").join("-")}`
       );
+      elementRefs.panelContainer.classList.add(
+        `prompt-panel-container-${eventData.position
+          .toLowerCase()
+          .split("_")
+          .join("-")}`
+      );
     } else if (action === "Resize") {
       elementRefs.panelIframe.style.height = `${eventData.height}px`;
       elementRefs.panelIframe.style.width = `${eventData.width}px`;
+      elementRefs.panelContainer.style.height = `${eventData.height}px`;
+      elementRefs.panelContainer.style.width = `${eventData.width}px`;
+      elementRefs.panelContainer.style.visibility = "visible";
     }
   }
 

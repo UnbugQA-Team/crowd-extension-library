@@ -19,16 +19,79 @@
   border-radius: 10px 10px 10px 10px;
 }
 
+.crowd-widget .crowd-widget-body-iframe {
+  width: 400px;
+  background: transparent;
+  position: fixed;
+  border-radius: 10px 10px 10px 10px;
+}
+
 @media (max-width: 500px) {
-  .crowd-widget .crowd-widget-body-frame {
+  .crowd-widget .crowd-widget-body-frame,
+  .crowd-widget .crowd-widget-body-iframe {
     width: 100%;
   }
 }
 .crowd-widget .crowd-widget-body-frame,
-.crowd-widget .crowd-widget-launcher-frame {
+.crowd-widget .crowd-widget-launcher-frame,
+.crowd-widget .crowd-widget-body-iframe {
   opacity: 1;
   transition: visibility 0s, opacity 0.9s;
 }
+
+/* Styling for the widget body close button */
+.crowd-widget .close-widget-panel-btn {
+  /* h-35 w-35 bg-[#111827] fixed rounded-full top-10 flex justify-center items-end cursor-pointer */
+  width: 35px !important;
+  height: 35px !important;
+  background: #111827 !important;
+  position: absolute !important;
+  border-radius: 50% !important;
+  right: 5px !important;
+  top: -20px;
+  z-index: 1110;
+  display: flex;
+  justify-content: center !important;
+  align-items: center !important;
+  cursor: pointer;
+  border: none !important;
+}
+
+.crowd-widget .close-widget-panel-btn svg {
+  width: 25px !important;
+  height: 25px !important;
+}
+.crowd-widget .close-widget-panel-btn svg path {
+  stroke-width: 2.5px !important;
+}
+
+/* For the container which the panel iframe is in */
+
+.crowd-widget-body-frame.widget-panel-container-bottom-right {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+}
+.crowd-widget-body-frame.widget-panel-container-bottom-left {
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+}
+.crowd-widget-body-frame.widget-panel-container-middle-left {
+  position: fixed;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+}
+
+.crowd-widget-body-frame.widget-panel-container-middle-right {
+  position: fixed;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+}
+
+/* The iframe fo panel */
 
 .crowd-widget-body-frame.widget-panel-bottom-right {
   position: fixed;
@@ -81,6 +144,28 @@
 }
 
 @media (max-width: 500px) {
+  .crowd-widget-body-frame.widget-panel-container-bottom-right {
+    right: 0px;
+    bottom: 0px;
+  }
+  .crowd-widget-body-frame.widget-panel-container-bottom-left {
+    left: 0px;
+    bottom: 0px;
+  }
+  .crowd-widget-body-frame.widget-panel-container-middle-left {
+    left: 0px;
+    transform: translateY(0%);
+    top: auto !important;
+    bottom: 0px;
+  }
+  .crowd-widget-body-frame.widget-panel-container-middle-right {
+    right: 0px;
+    transform: translateY(0%);
+    top: auto !important;
+    bottom: 0px;
+  }
+
+  /* The iframe fo panel */
   .crowd-widget-body-frame.widget-panel-bottom-right {
     right: 0px;
     bottom: 0px;
