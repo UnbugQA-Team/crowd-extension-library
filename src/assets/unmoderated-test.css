@@ -3,7 +3,6 @@
 }
 
 .crowd-prompt iframe {
-  /* display: flex; */
   z-index: 1100;
   background-color: transparent !important;
   background: transparent !important;
@@ -20,12 +19,99 @@
   border-radius: 10px 10px 10px 10px;
 }
 
+.crowd-prompt .prompt-body-iframe {
+  width: 470px;
+  background: transparent;
+  position: fixed;
+  border-radius: 10px 10px 10px 10px;
+}
+
 @media (max-width: 600px) {
-  .crowd-prompt .prompt-body-frame {
+  .crowd-prompt .prompt-body-frame,
+  .crowd-prompt .prompt-body-iframe {
     width: 100% !important;
   }
 }
 
+/* Styling for the prompt body close button */
+.crowd-prompt .close-prompt-panel-btn {
+  /* h-35 w-35 bg-[#111827] fixed rounded-full top-10 flex justify-center items-end cursor-pointer */
+  width: 35px !important;
+  height: 35px !important;
+  background: #111827 !important;
+  position: absolute !important;
+  border-radius: 50% !important;
+  right: 10px !important;
+  top: -20px;
+  z-index: 1110;
+  display: flex;
+  justify-content: center !important;
+  align-items: center !important;
+  cursor: pointer;
+  border: none !important;
+}
+
+.crowd-prompt .close-prompt-panel-btn svg {
+  width: 25px !important;
+  height: 25px !important;
+}
+.crowd-prompt .close-prompt-panel-btn svg path {
+  stroke-width: 2.5px !important;
+}
+
+/* Styling for panel container */
+
+.prompt-body-frame.prompt-panel-container-bottom-right {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+}
+.prompt-body-frame.prompt-panel-container-bottom-left {
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
+}
+.prompt-body-frame.prompt-panel-container-middle-left {
+  position: fixed;
+  left: -2px;
+  top: 50%;
+  transform: translateX(-50%) rotate(-90deg);
+  transform-origin: 50% 0%;
+}
+
+.prompt-body-frame.prompt-panel-container-middle-right {
+  position: fixed;
+  top: 50%;
+  right: 0px;
+  transform: rotate(-90deg) translate(50%, -50%);
+  transform-origin: 100% 50%;
+}
+
+@media (max-width: 600px) {
+  .prompt-body-frame.prompt-panel-container-bottom-right {
+    right: 0px;
+    bottom: 0px;
+  }
+  .prompt-body-frame.prompt-panel-container-bottom-left {
+    left: 0px;
+    bottom: 0px;
+  }
+  .prompt-body-frame.prompt-panel-container-middle-left {
+    left: 0px;
+    transform: translateY(0%);
+    top: auto !important;
+    bottom: 0px;
+  }
+
+  .prompt-body-frame.prompt-panel-container-middle-right {
+    right: 0px;
+    transform: translateY(0%);
+    top: auto !important;
+    bottom: 0px;
+  }
+}
+
+/* Styling for panel iframe */
 .prompt-body-frame.prompt-panel-bottom-right {
   position: fixed;
   right: 10px;
