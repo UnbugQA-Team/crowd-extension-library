@@ -32,6 +32,7 @@ export const initCrowdWidget = () => {
   if ((window as any).CrowdApp && (window as any).CrowdApp.crowd_token) {
     const crowd_token = (window as any).CrowdApp.crowd_token;
     const crowdWidgetClass = new SetupCrowdWidget(crowd_token, "crowd-widget");
+    console.log("Creaing widget", crowdWidgetClass);
     crowdWidgetClass.setupWidgetContainer();
   } else {
     console.error(
