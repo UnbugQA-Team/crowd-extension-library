@@ -35,6 +35,8 @@ const crowdOrigin = extensionBaseOriginUrl; // ;
 const baseURL = unmoderatedTestBaseUrl; // "http://localhost:2222/unmoderated-test";
 
 export const initCrowdPrompt = () => {
+  const doContainerExist = document.getElementsByClassName("crowd-prompt");
+  if (doContainerExist.length) return;
   if ((window as any).CrowdApp && (window as any).CrowdApp.crowd_token) {
     const crowd_token = (window as any).CrowdApp.crowd_token;
     const crowdWidgetClass = new SetUpUnModeratedTestPrompt(
@@ -164,7 +166,7 @@ export class SetUpUnModeratedTestPrompt {
    * @description Setup the iframe for the prompt panel
    */
   private setupPromptPanelElement() {
-    const promptPanelIframe = `<div id="${this.promptPanelContainerFrameId}" class="prompt-body-frame" style="height: 0; visibility: hidden;"> <button id="close-prompt-panel-btn" class="close-prompt-panel-btn"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    const promptPanelIframe = `<div id="${this.promptPanelContainerFrameId}" class="prompt-body-frame" style="height: 0; visibility: hidden;"> <button type="button" id="close-prompt-panel-btn" class="close-prompt-panel-btn"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M4 12L12 4M4 4L12 12" stroke="#F9FAFB" stroke-width="1.13" stroke-linecap="round" stroke-linejoin="round"/>
     </svg></button><iframe id="${this.promptPanelFrameId}" frameborder="0" class="prompt-body-iframe" allowtransparency="true" style="height: 0;"></iframe></div>`;
     this.promptParentContainer.innerHTML += promptPanelIframe;
