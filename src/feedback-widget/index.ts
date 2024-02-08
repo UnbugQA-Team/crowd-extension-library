@@ -29,10 +29,13 @@ const crowdOrigin = extensionBaseOriginUrl;
 const baseURL = widgetBaseUrl;
 
 export const initCrowdWidget = () => {
+  const doContainerExist = document.getElementsByClassName("crowd-widget");
+  // console.log(doContainerExist);
+  if (doContainerExist.length) return;
   if ((window as any).CrowdApp && (window as any).CrowdApp.crowd_token) {
     const crowd_token = (window as any).CrowdApp.crowd_token;
     const crowdWidgetClass = new SetupCrowdWidget(crowd_token, "crowd-widget");
-    console.log("Creaing widget", crowdWidgetClass);
+    // console.log("Creaing widget", crowdWidgetClass);
     crowdWidgetClass.setupWidgetContainer();
   } else {
     console.error(
@@ -188,7 +191,7 @@ class SetupCrowdWidget {
 
   //** Setup the iframe for the widget panel */
   private setupWidgetPanelElement() {
-    const widgetPanelIframe = `<div id="${this.panelContainerFrameId}" class="crowd-widget-body-frame" style="height: 0; visibility: hidden;"> <button id="close-widget-panel-btn" class="close-widget-panel-btn"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    const widgetPanelIframe = `<div id="${this.panelContainerFrameId}" class="crowd-widget-body-frame" style="height: 0; visibility: hidden;"> <button type="button" id="close-widget-panel-btn" class="close-widget-panel-btn"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M4 12L12 4M4 4L12 12" stroke="#F9FAFB" stroke-width="1.13" stroke-linecap="round" stroke-linejoin="round"/>
     </svg></button> <iframe id="${this.panelFrameId}" frameborder="0" class="crowd-widget-body-iframe" allowtransparency="true" style="height: 0;"></iframe></div>`;
     this.widgetParentContainer.innerHTML += widgetPanelIframe;
