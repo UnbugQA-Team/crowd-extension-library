@@ -460,6 +460,7 @@ class SetupCrowdWidget {
           elementRefs.controllerWapper !== null &&
           !this.iframesLoaded.controllerFrame
         ) {
+          // console.log("Paulex Is My Guy");
           this.assignWidgetControllerEndpoints();
           this.iframesLoaded.controllerFrame = true;
         }
@@ -486,6 +487,7 @@ class SetupCrowdWidget {
    */
   private triggerWidgetOnLinkHash() {
     try {
+      const elementRefs = this.getWidgetElementsReference();
       this.checkCompabilityForWidget();
       const hashString = window.location.hash;
       if (
@@ -498,6 +500,14 @@ class SetupCrowdWidget {
         !this.isWidgetPanelVisible
       ) {
         this.toggleWidgetVisibility();
+        if (
+          elementRefs.controllerWapper !== null &&
+          !this.iframesLoaded.controllerFrame
+        ) {
+          // console.log("Paulex Is My Guy");
+          this.assignWidgetControllerEndpoints();
+          this.iframesLoaded.controllerFrame = true;
+        }
       }
     } catch {
       window.removeEventListener(
