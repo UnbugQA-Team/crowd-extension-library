@@ -1,10 +1,14 @@
 import * as rrweb from "rrweb";
 import rrwebPlayer from "rrweb-player";
 import "rrweb-player/dist/style.css";
-import { ScreenRecordDoneEvent, WidgetEventType } from "../model";
+import { RecorderBodyClass } from "../constant";
+import { ScreenRecordDoneEvent, WidgetEventType } from "../../../model/widget";
+import { extensionBaseOriginUrl } from "../../../utils";
+import { widgetElementsReferences } from ".";
 
 let screenRecordEvent = [] as any;
 let recorderObj = null as any;
+
 const recordingFrameIndicator = document.createElement("div");
 recordingFrameIndicator.classList.add("recording-frame");
 
@@ -16,30 +20,8 @@ export const startBugTrackingScreenRecording = () => {
       screenRecordEvent.push(event);
     },
     recordCanvas: true,
+    //  blockClass: "controller-frame" // rr-block,
   });
-};
-
-const generateHeightForPlayer = () => {
-  const windowHeight = window.innerHeight;
-  const playerFrameElement = document.querySelector(
-    ".record-player-frame"
-  ) as HTMLDivElement;
-  if (playerFrameElement) {
-    const computedStyle = window.getComputedStyle(playerFrameElement);
-    const paddingTop = parseInt(
-      computedStyle.getPropertyValue("padding-top"),
-      10
-    );
-    // const paddingLeft = parseInt(
-    //   computedStyle.getPropertyValue("padding-left"),
-    //   10
-    // );
-
-    const playerHeight = windowHeight - (paddingTop * 2 + 60 + 20);
-
-    return playerHeight;
-  }
-  return 0;
 };
 
 export const stopBugTrackingScreenRecording = () => {
@@ -62,21 +44,22 @@ export const stopBugTrackingScreenRecording = () => {
   removeWidgetFrameToBody();
 };
 
-export const saveScreenRecording = (
-  widgetOrigin: string,
-  panelFrame: HTMLIFrameElement
-) => {
+export const clearRecording = () => {
+  screenRecordEvent = [];
+};
+
+export const saveScreenRecording = () => {
+  const elementRefs = widgetElementsReferences();
   const postMessageData: ScreenRecordDoneEvent = {
     eventType: WidgetEventType.ScreenRecordDone,
     payload: {
       recorderedEvent: screenRecordEvent,
     },
   };
-  panelFrame.contentWindow?.postMessage(postMessageData, widgetOrigin);
-};
-
-export const clearRecording = () => {
-  screenRecordEvent = [];
+  elementRefs.panelIframe.contentWindow?.postMessage(
+    postMessageData,
+    extensionBaseOriginUrl
+  );
 };
 
 function emptyElement(element: HTMLElement) {
@@ -86,10 +69,28 @@ function emptyElement(element: HTMLElement) {
 }
 
 const appendWidgetFrameToBody = () => {
-  document.body.classList.add("crowd-recording-frame");
+  document.body.classList.add(RecorderBodyClass);
   document.body.appendChild(recordingFrameIndicator);
 };
 
+const generateHeightForPlayer = () => {
+  const windowHeight = window.innerHeight;
+  const playerFrameElement = document.querySelector(
+    ".record-player-frame"
+  ) as HTMLDivElement;
+  if (playerFrameElement) {
+    const computedStyle = window.getComputedStyle(playerFrameElement);
+    const paddingTop = parseInt(
+      computedStyle.getPropertyValue("padding-top"),
+      10
+    );
+    const playerHeight = windowHeight - (paddingTop * 2 + 60 + 20);
+
+    return playerHeight;
+  }
+  return 0;
+};
+
 const removeWidgetFrameToBody = () => {
-  document.body.classList.remove("crowd-recording-frame");
+  document.body.classList.remove(RecorderBodyClass);
 };
