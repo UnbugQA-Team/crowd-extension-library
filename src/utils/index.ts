@@ -1,4 +1,4 @@
-const devCrowdOrigin = "https://extension.crowdapp.io"; // "http://localhost:2222";
+const devCrowdOrigin = "http://localhost:2222";
 const prodCrowdOrigin = "https://extension.crowdapp.io";
 
 export const extensionBaseOriginUrl = import.meta.env.DEV
@@ -87,6 +87,11 @@ export const checkPageCompabilityTargetedPages = (
     : window.location.href.replace(/\/$/, "");
 
   const currentUrlObject = new URL(currentUrl);
+
+  if (specificPageValue.includes(currentUrlObject.origin)) {
+    currentUrlObject.pathname = currentUrl;
+  }
+
   if (specificPageOption === "start_with") {
     return currentUrlObject.pathname.startsWith(specificPageValue);
     // return currentUrl.startsWith(specificPageValue);
