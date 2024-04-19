@@ -13,6 +13,8 @@ export const LauncherFrame = () => {
 
     const elementRefs = widgetElementsReferences();
 
+    // console.log(isLauncherVisible, shouldShowLauncher);
+
     elementRefs.launcherIframe.style.visibility =
       !shouldShowLauncher || !isLauncherVisible ? "hidden" : "visible";
   });
