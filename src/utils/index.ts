@@ -88,11 +88,13 @@ export const checkPageCompabilityTargetedPages = (
 
   const currentUrlObject = new URL(currentUrl);
 
+  console.log(currentUrlObject, currentUrl);
+
   if (specificPageValue.includes(currentUrlObject.origin)) {
     currentUrlObject.pathname = currentUrl;
   }
 
-  console.log(currentUrlObject.pathname, specificPageValue);
+  console.log(currentUrlObject.pathname, specificPageValue, currentUrl);
 
   if (specificPageOption === "start_with") {
     return currentUrlObject.pathname.startsWith(specificPageValue);
