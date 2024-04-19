@@ -82,35 +82,34 @@ export const checkPageCompabilityTargetedPages = (
   specificPageOption: string,
   specificPageValue: string
 ) => {
+  /* Hold the value to display */
+  let displayPageValue = specificPageValue;
+
+  /* Get the currently displayed page */
   const currentUrl = specificPageValue.endsWith("/")
     ? window.location.href
     : window.location.href.replace(/\/$/, "");
 
-  console.log(currentUrl);
-
+  /* Create a new URL object for the currently displayed page */
   const currentUrlObject = new URL(currentUrl);
 
-  console.log(currentUrlObject);
-
-  // if (specificPageValue.includes(currentUrlObject.origin)) {
-  //   currentUrlObject.pathname = currentUrl;
-  // }
-
-  console.log(currentUrlObject.pathname, specificPageValue);
+  /* Replace the origin of the  specified page value with an empty string if the specified page value starts with the origin of the currently displayed page */
+  if (specificPageValue.includes(currentUrlObject.origin)) {
+    displayPageValue = specificPageValue.replace(currentUrlObject.origin, "");
+  }
 
   if (specificPageOption === "start_with") {
-    return currentUrlObject.pathname.startsWith(specificPageValue);
-    // return currentUrl.startsWith(specificPageValue);
+    return currentUrlObject.pathname.startsWith(displayPageValue);
   } else if (specificPageOption === "end_with") {
-    return currentUrlObject.pathname.endsWith(specificPageValue);
+    return currentUrlObject.pathname.endsWith(displayPageValue);
   } else if (specificPageOption === "contains") {
-    return currentUrlObject.pathname.includes(specificPageValue);
+    return currentUrlObject.pathname.includes(displayPageValue);
   } else if (specificPageOption === "exactly_matches") {
-    return currentUrlObject.pathname === specificPageValue;
+    return currentUrlObject.pathname === displayPageValue;
   } else if (specificPageOption === "is_not") {
-    return currentUrlObject.pathname !== specificPageValue;
+    return currentUrlObject.pathname !== displayPageValue;
   } else if (specificPageOption === "matches_regex") {
-    const regexPattern = new RegExp(specificPageValue, "i");
+    const regexPattern = new RegExp(displayPageValue, "i");
     return regexPattern.test(currentUrlObject.pathname);
   } else {
     return false;
