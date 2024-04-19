@@ -86,15 +86,17 @@ export const checkPageCompabilityTargetedPages = (
     ? window.location.href
     : window.location.href.replace(/\/$/, "");
 
+  console.log(currentUrl);
+
   const currentUrlObject = new URL(currentUrl);
 
-  console.log(currentUrlObject, currentUrl);
+  console.log(currentUrlObject);
 
-  if (specificPageValue.includes(currentUrlObject.origin)) {
-    currentUrlObject.pathname = currentUrl;
-  }
+  // if (specificPageValue.includes(currentUrlObject.origin)) {
+  //   currentUrlObject.pathname = currentUrl;
+  // }
 
-  console.log(currentUrlObject.pathname, specificPageValue, currentUrl);
+  console.log(currentUrlObject.pathname, specificPageValue);
 
   if (specificPageOption === "start_with") {
     return currentUrlObject.pathname.startsWith(specificPageValue);
