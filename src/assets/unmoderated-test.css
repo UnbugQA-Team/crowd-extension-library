@@ -1,5 +1,6 @@
 .crowd-prompt {
   position: fixed;
+  z-index: 5000;
 }
 
 .crowd-prompt iframe {
