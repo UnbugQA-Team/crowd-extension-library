@@ -23,7 +23,6 @@ export const initCrowdFeedbackWidget = async () => {
       });
     }
   } catch (error: any) {
-    console.log(error);
     console.warn(
       error.message ??
         "Crowd App installation failed. Please ensure that you are using the correct code snippet"

@@ -135,11 +135,6 @@ export class SetupFeedbackWidget {
     /* Check if the token is matching */
     if (event.data.token !== this.integratedWidgetToken) return;
 
-    console.log(
-      event.data.token,
-      this.integratedWidgetToken,
-      event.data.payload
-    );
     switch (event.data.eventType) {
       case WidgetEventType.LauncherLoaded: {
         store.modules.widget.action.updateIframeLoaded(

@@ -1,18 +1,8 @@
 const devCrowdOrigin = "http://localhost:2222";
+const stagingCrowdOrigin = "http://staging.extension.crowdapp.io";
 const prodCrowdOrigin = "https://extension.crowdapp.io";
 
-export const extensionBaseOriginUrl = import.meta.env.DEV
-  ? devCrowdOrigin
-  : prodCrowdOrigin;
-
-export const unmoderatedTestBaseUrl = `${extensionBaseOriginUrl}/extension/unmoderated-test`;
-export const widgetBaseUrl = `${extensionBaseOriginUrl}/extension/widget`;
-
-export const generateId = (suffix: string): string => {
-  return `${suffix}-${new Date().getTime()}${Math.floor(Math.random() * 100)}`;
-};
-
-export const getExtensionOriginUrl = (): string => {
+export const getExtensionOriginEnvironment = (): string => {
   if ((window as any).CrowdApp && (window as any).CrowdApp.environment) {
     const crowd_environment = (window as any).CrowdApp.environment;
     return crowd_environment;
@@ -21,6 +11,31 @@ export const getExtensionOriginUrl = (): string => {
   } else {
     return "production";
   }
+};
+
+const getExtensionEnvironmentUrl = () => {
+  if (getExtensionOriginEnvironment() === "production") {
+    return prodCrowdOrigin;
+  } else if (getExtensionOriginEnvironment() === "staging") {
+    return stagingCrowdOrigin;
+  } else if (getExtensionOriginEnvironment() === "development") {
+    return devCrowdOrigin;
+  } else {
+    return prodCrowdOrigin;
+  }
+};
+
+/* import.meta.env.DEV
+  ? devCrowdOrigin
+  : */
+
+export const extensionBaseOriginUrl: string = getExtensionEnvironmentUrl();
+
+export const unmoderatedTestBaseUrl = `${extensionBaseOriginUrl}/extension/unmoderated-test`;
+export const widgetBaseUrl = `${extensionBaseOriginUrl}/extension/widget`;
+
+export const generateId = (suffix: string): string => {
+  return `${suffix}-${new Date().getTime()}${Math.floor(Math.random() * 100)}`;
 };
 
 export const getClientSiteDomain = () => {
@@ -43,7 +58,7 @@ export const urlPathQuery = (integrationToken: string) => {
     getClientSiteDomain().host
   )}&protocol=${encodeURIComponent(
     getClientSiteDomain().protocol
-  )}&env=${getExtensionOriginUrl()}`;
+  )}&env=${getExtensionOriginEnvironment()}`;
 };
 
 export const getDeviceType = () => {
