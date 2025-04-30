@@ -1,6 +1,6 @@
 import {
   PromptReshowOptions,
-  checkPageCompabilityTargetedPages,
+  checkPageCompatibilityTargetedPages,
   getDeviceType,
 } from "../../utils";
 import { DeviceSupported, PromptDisplayRule } from "../model";
@@ -123,7 +123,7 @@ export const checkDeviceAndPageCompability = async (
     };
   } else if (data.visibilityOption === "SPECIFICPAGES") {
     const pageUrlCompability = data.targetPages.filter((item) =>
-      checkPageCompabilityTargetedPages(item.optionName, item.optionValue)
+      checkPageCompatibilityTargetedPages(item.optionName, item.optionValue)
     );
 
     // console.log(pageUrlCompability);

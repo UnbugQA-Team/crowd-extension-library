@@ -78,7 +78,7 @@ export const PromptReshowOptions = [
   { label: "Reshow after 1 week", value: "168_hours" },
 ];
 
-export const checkPageCompabilityTargetedPages = (
+export const checkPageCompatibilityTargetedPages = (
   specificPageOption: string,
   specificPageValue: string
 ) => {

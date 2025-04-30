@@ -1,3 +1,9 @@
+export interface ActivatedWidgetResponse {
+  data: string[];
+  status: number;
+  message: any[];
+}
+
 export enum WidgetEventType {
   LauncherLoaded = "LAUNCHERLOADED",
   LauncherResize = "LAUNCHERRESIZE",
@@ -27,6 +33,7 @@ export type WidgetPostMessageEventData =
 
 export interface LauncherLoadedEvent {
   eventType: WidgetEventType.LauncherLoaded;
+  token: string;
   payload: {
     displayRules: WidgetDisplayRules;
     showFeedbackWidget: boolean;
@@ -36,6 +43,7 @@ export interface LauncherLoadedEvent {
 
 export interface LauncherResizeEvent {
   eventType: WidgetEventType.LauncherResize;
+  token: string;
   payload: {
     height: number;
     width: number;
@@ -44,16 +52,19 @@ export interface LauncherResizeEvent {
 
 export interface WidgetImpressionEvent {
   eventType: WidgetEventType.WidgetImpression;
+  token: string;
   payload: {};
 }
 
 export interface WidgetImpressionRecordedEvent {
   eventType: WidgetEventType.ImpressionRecorded;
+  token: string;
   payload: {};
 }
 
 export interface PanelLoadedEvent {
   eventType: WidgetEventType.PanelLoaded;
+  token: string;
   payload: {
     position: string;
   };
@@ -61,11 +72,13 @@ export interface PanelLoadedEvent {
 
 export interface OpenPanelEvent {
   eventType: WidgetEventType.OpenPanel;
+  token: string;
   payload: {};
 }
 
 export interface PanelResizeEvent {
   eventType: WidgetEventType.PanelResize;
+  token: string;
   payload: {
     height: number;
     width: number;
@@ -74,23 +87,27 @@ export interface PanelResizeEvent {
 
 export interface StartCountDownEvent {
   eventType: WidgetEventType.StartCountDown;
+  token: string;
   payload: {};
 }
 
 export interface ScreenRecordDoneEvent {
   eventType: WidgetEventType.ScreenRecordDone;
+  token: string;
   payload: {
-    recorderedEvent: any[];
+    recordedEvent: any[];
   };
 }
 
 export interface StartScreenRecordEvent {
   eventType: WidgetEventType.StartScreenRecord;
+  token: string;
   payload: {};
 }
 
 export interface StopScreenRecordEvent {
   eventType: WidgetEventType.StopScreenRecord;
+  token: string;
   payload: {};
 }
 

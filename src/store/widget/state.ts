@@ -1,7 +1,7 @@
 import { proxy } from "valtio";
 import { WidgetDisplayRules } from "../../model/widget";
 
-export interface WidgetFeedbackState {
+interface WidgetContainerState {
   isElementsMounted: boolean;
   isPanelVisible: boolean;
   isLauncherVisible: boolean;
@@ -20,11 +20,41 @@ export interface WidgetFeedbackState {
   controllerFrameWrapperId: string;
   controllerFrameId: string;
   screenRecordPlayerFrameId: string;
+  panelCloseButtonId: string;
 
   widgetDisplayRule: WidgetDisplayRules | null;
 }
 
+export interface WidgetFeedbackState {
+  integratedWidgetToken: string;
+
+  isElementsMounted: boolean;
+  isPanelVisible: boolean;
+  isLauncherVisible: boolean;
+  isControllerVisible: boolean;
+  isRecordPlayerVisible: boolean;
+  shouldShowLauncher: boolean;
+
+  isLauncherFrameLoaded: boolean;
+  isPanelFrameLoaded: boolean;
+  isControllerFrameLoaded: boolean;
+
+  widgetContainerId: string;
+  panelFrameWrapperId: string;
+  panelFrameId: string;
+  launcherFrameId: string;
+  controllerFrameWrapperId: string;
+  controllerFrameId: string;
+  screenRecordPlayerFrameId: string;
+  panelCloseButtonId: string;
+
+  widgetDisplayRule: WidgetDisplayRules | null;
+
+  widgetContainerState: { [key: string]: WidgetContainerState };
+}
+
 export const state: WidgetFeedbackState = proxy({
+  integratedWidgetToken: "",
   isElementsMounted: false,
   isPanelVisible: false,
   isLauncherVisible: false,
@@ -44,8 +74,11 @@ export const state: WidgetFeedbackState = proxy({
   controllerFrameWrapperId: "",
   controllerFrameId: "",
   screenRecordPlayerFrameId: "",
+  panelCloseButtonId: "",
 
   widgetDisplayRule: null,
+
+  widgetContainerState: {},
 });
 
 export default state;

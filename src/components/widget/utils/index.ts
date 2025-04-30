@@ -1,20 +1,12 @@
-import {
-  WidgetDisplayRules,
-  WidgetEventType,
-  WidgetImpressionEvent,
-  WidgetTargetPage,
-} from "../../../model/widget";
+import { WidgetDisplayRules, WidgetTargetPage } from "../../../model/widget";
 import store from "../../../store";
 import {
-  checkPageCompabilityTargetedPages,
-  extensionBaseOriginUrl,
+  checkPageCompatibilityTargetedPages,
   getDeviceType,
   urlPathQuery,
   widgetBaseUrl,
 } from "../../../utils";
 import { elementSelector } from "../../../utils/dom_utils";
-import { adjustWidgetLauncherPositionDimension } from "../launcher";
-import { getUserIDSession } from "./user-session";
 
 /**
  * Retrieves references to various widget elements.
@@ -23,27 +15,37 @@ import { getUserIDSession } from "./user-session";
  * @throws {Error} If the widget container ID, panel frame wrapper ID, panel frame ID, launcher frame ID,
  * controller frame ID, or controller frame wrapper ID is not found in the store.
  */
-export const widgetElementsReferences = (): {
+export const widgetElementsReferences = (
+  widgetToken: string
+): {
   widgetWrapper: HTMLDivElement;
   panelContainerElement: HTMLDivElement;
   panelIframe: HTMLIFrameElement;
   launcherIframe: HTMLIFrameElement;
-  controllerWapper: HTMLDivElement;
+  controllerWrapper: HTMLDivElement;
   controllerIframe: HTMLIFrameElement;
   playerFrame: HTMLDivElement;
 } => {
   const widgetContainerId: string =
-    store.modules.widget.state.widgetContainerId;
+    store.modules.widget.state.widgetContainerState[widgetToken]
+      .widgetContainerId;
   const panelFrameWrapperId: string =
-    store.modules.widget.state.panelFrameWrapperId;
-  const panelFrameId: string = store.modules.widget.state.panelFrameId;
-  const launcherFrameId: string = store.modules.widget.state.launcherFrameId;
+    store.modules.widget.state.widgetContainerState[widgetToken]
+      .panelFrameWrapperId;
+  const panelFrameId: string =
+    store.modules.widget.state.widgetContainerState[widgetToken].panelFrameId;
+  const launcherFrameId: string =
+    store.modules.widget.state.widgetContainerState[widgetToken]
+      .launcherFrameId;
   const controllerFrameId: string =
-    store.modules.widget.state.controllerFrameId;
+    store.modules.widget.state.widgetContainerState[widgetToken]
+      .controllerFrameId;
   const controllerFrameWrapperId: string =
-    store.modules.widget.state.controllerFrameWrapperId;
+    store.modules.widget.state.widgetContainerState[widgetToken]
+      .controllerFrameWrapperId;
   const screenRecordPlayerFrameId: string =
-    store.modules.widget.state.screenRecordPlayerFrameId;
+    store.modules.widget.state.widgetContainerState[widgetToken]
+      .screenRecordPlayerFrameId;
 
   const widgetWrapper: HTMLDivElement = elementSelector(
     "id",
@@ -77,11 +79,11 @@ export const widgetElementsReferences = (): {
     throw new Error(`Element with ID "${launcherFrameId}" not found`);
   }
 
-  const controllerWapper: HTMLDivElement = elementSelector(
+  const controllerWrapper: HTMLDivElement = elementSelector(
     "id",
     controllerFrameWrapperId
   ) as HTMLDivElement;
-  if (!controllerWapper) {
+  if (!controllerWrapper) {
     throw new Error(`Element with ID "${controllerFrameWrapperId}" not found`);
   }
 
@@ -106,7 +108,7 @@ export const widgetElementsReferences = (): {
     panelContainerElement,
     panelIframe,
     launcherIframe,
-    controllerWapper,
+    controllerWrapper,
     controllerIframe,
     playerFrame,
   };
@@ -168,7 +170,7 @@ export const checkDeviceAndPageCompabilityForWidget = async (
   ) {
     const targetedPages = JSON.parse(data.targetPages) as WidgetTargetPage[];
     const pageUrlCompability = targetedPages.filter((item) =>
-      checkPageCompabilityTargetedPages(item.optionName, item.optionValue)
+      checkPageCompatibilityTargetedPages(item.optionName, item.optionValue)
     );
 
     if (
@@ -185,80 +187,4 @@ export const checkDeviceAndPageCompabilityForWidget = async (
   } else {
     return false;
   }
-};
-
-export const checkCompabilityForWidget = () => {
-  const elementRefs = widgetElementsReferences();
-
-  if (store.modules.widget.state.widgetDisplayRule === null) return;
-  checkDeviceAndPageCompabilityForWidget(
-    store.modules.widget.state.widgetDisplayRule
-  ).then((response) => {
-    if (response && store.modules.widget.state.shouldShowLauncher) {
-      elementRefs.widgetWrapper.style.visibility = "visible";
-      store.modules.widget.action.updateWidgetSectionVisibility({
-        isLauncherVisible: store.modules.widget.state.shouldShowLauncher,
-      });
-      setTimeout(() => {
-        adjustWidgetLauncherPositionDimension("Position", response);
-        if (!getUserIDSession()) {
-          const postMessageData: WidgetImpressionEvent = {
-            eventType: WidgetEventType.WidgetImpression,
-            payload: {},
-          };
-          elementRefs.launcherIframe.contentWindow?.postMessage(
-            postMessageData,
-            extensionBaseOriginUrl
-          );
-        }
-      }, response.showAfter);
-    } else if (response && !store.modules.widget.state.shouldShowLauncher) {
-      elementRefs.widgetWrapper.style.visibility = "visible";
-      store.modules.widget.action.updateWidgetSectionVisibility({
-        isLauncherVisible: false,
-      });
-    } else {
-      elementRefs.widgetWrapper.style.visibility = "hidden";
-    }
-  });
-};
-
-export const enableControllerDragging = () => {
-  const element = widgetElementsReferences().controllerWapper;
-
-  let pos1 = 0,
-    pos2 = 0,
-    pos3 = 0,
-    pos4 = 0;
-
-  // Function to handle mouse down event
-  function dragMouseDown(e: any) {
-    e = e || window.event;
-    e.preventDefault();
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    document.onmousemove = elementDrag;
-  }
-
-  // Function to handle mouse move event
-  function elementDrag(e: any) {
-    e = e || window.event;
-    e.preventDefault();
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    element.style.top = element.offsetTop - pos2 + "px";
-    element.style.left = element.offsetLeft - pos1 + "px";
-  }
-
-  // Function to handle mouse up event
-  function closeDragElement() {
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
-
-  // Attach the event listener to the iframe
-  element.onmousedown = dragMouseDown;
 };

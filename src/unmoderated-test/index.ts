@@ -156,7 +156,7 @@ export class SetUpUnModeratedTestPrompt {
    */
   private handlePostMessageEvent(event: MessageEvent<PostMessageEventData>) {
     if (event.origin !== crowdOrigin) return;
-    this.listenAndExecutePostMessageInteration(event);
+    this.listenAndExecutePostMessageInteraction(event);
   }
 
   /**
@@ -272,7 +272,7 @@ export class SetUpUnModeratedTestPrompt {
     );
   }
 
-  private listenAndExecutePostMessageInteration(
+  private listenAndExecutePostMessageInteraction(
     event: MessageEvent<PostMessageEventData>
   ) {
     const elementRefs = this.getPromptElementsReference();
