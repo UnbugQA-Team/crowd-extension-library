@@ -17,24 +17,21 @@ jobs:
         with:
           node-version: 16.20.2
 
-      - name: Echo Bucket
-        run: echo ${{ secrets.AWS_S3_BUCKET }} | sed 's/./& /g'
+      - name: Install Dependencies
+        run: npm install
 
-    #   - name: Install Dependencies
-    #     run: npm install
+      - name: Build Nuxt.js App
+        run: npm run build
 
-    #   - name: Build Nuxt.js App
-    #     run: npm run build
-
-    #   - name: Deploy to S3
-    #     uses: jakejarvis/s3-sync-action@master
-    #     with:
-    #       args: --acl public-read --follow-symlinks --delete --exclude '.git/*'
-    #     env:
-    #       AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-    #       AWS_REGION: "us-east-1"
-    #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #       SOURCE_DIR: "dist"
-    #       DEST_DIR: "crowd-library"
-    #     if: success()
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks --delete --exclude '.git/*'
+        env:
+          AWS_S3_BUCKET: "staging.extension.crowdapp.io" # ${{ secrets.AWS_S3_BUCKET }}
+          AWS_REGION: "us-east-1"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          SOURCE_DIR: "dist"
+          DEST_DIR: "crowd-library"
+        if: success()
