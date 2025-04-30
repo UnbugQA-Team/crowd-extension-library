@@ -178,24 +178,32 @@ export class WidgetHelper {
   }
 
   triggerWidgetOnLinkHash() {
-    const onTriggerHashString: string = "#crowd-widget";
+    const onTriggerHashString: string =
+      "#crowd-widget-" + this.integratedWidgetToken;
     try {
       this.checkCompatibilityForWidget();
       const hashString = window.location.hash;
       if (
         hashString !== onTriggerHashString &&
-        store.modules.widget.state.isPanelVisible
+        store.modules.widget.state.widgetContainerState[
+          this.integratedWidgetToken
+        ].isPanelVisible
       ) {
         store.modules.widget.action.updateWidgetSectionVisibility(
           this.integratedWidgetToken,
           {
             isPanelVisible: false,
-            isLauncherVisible: store.modules.widget.state.shouldShowLauncher,
+            isLauncherVisible:
+              store.modules.widget.state.widgetContainerState[
+                this.integratedWidgetToken
+              ].shouldShowLauncher,
           }
         );
       } else if (
         hashString === onTriggerHashString &&
-        !store.modules.widget.state.isPanelVisible
+        !store.modules.widget.state.widgetContainerState[
+          this.integratedWidgetToken
+        ].isPanelVisible
       ) {
         store.modules.widget.action.updateWidgetSectionVisibility(
           this.integratedWidgetToken,

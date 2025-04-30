@@ -1,5 +1,5 @@
 const devCrowdOrigin = "http://localhost:2222";
-const stagingCrowdOrigin = "http://staging.extension.crowdapp.io";
+const stagingCrowdOrigin = "https://staging.extension.crowdapp.io";
 const prodCrowdOrigin = "https://extension.crowdapp.io";
 
 export const getExtensionOriginEnvironment = (): string => {
