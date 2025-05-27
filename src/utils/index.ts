@@ -86,13 +86,6 @@ export const PromptVisibilityOptions = [
   { label: "Specific pages", value: "SPECIFICPAGES" },
 ];
 
-export const PromptReshowOptions = [
-  { label: "Do not reshow", value: "0_hours" },
-  { label: "Reshow after 24 hours", value: "24_hours" },
-  { label: "Reshow after 3 days", value: "72_hours" },
-  { label: "Reshow after 1 week", value: "168_hours" },
-];
-
 export const checkPageCompatibilityTargetedPages = (
   specificPageOption: string,
   specificPageValue: string

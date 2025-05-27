@@ -4,7 +4,7 @@ import store from "../../../store";
 import * as rrweb from "rrweb";
 import rrwebPlayer from "rrweb-player";
 import "rrweb-player/dist/style.css";
-import { RecorderBodyClass } from "../constant";
+import { RecorderBodyClass } from "../../../constant";
 import { ScreenRecordDoneEvent, WidgetEventType } from "../../../model/widget";
 import { extensionBaseOriginUrl } from "../../../utils";
 

@@ -1,5 +1,5 @@
 import { generateId } from "../../../utils";
-import { CrowdCookieLifetime, CrowdElementIdPrefix } from "../constant";
+import { CrowdCookieLifetime, CrowdElementIdPrefix } from "../../../constant";
 
 /**
  * Generates a unique ID and stores it in a cookie.

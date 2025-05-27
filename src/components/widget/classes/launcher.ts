@@ -31,8 +31,6 @@ export class CrowdWidgetLauncher {
 
       const elementRefs = widgetElementsReferences(this.integratedWidgetToken);
 
-      // console.log(isLauncherVisible, shouldShowLauncher);
-
       elementRefs.launcherIframe.style.visibility =
         !shouldShowLauncher || !isLauncherVisible ? "hidden" : "visible";
     });

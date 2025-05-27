@@ -9,7 +9,7 @@ import { WidgetHelper } from "./classes/helpers";
 import { CrowdWidgetLauncher } from "./classes/launcher";
 import { CrowdWidgetPanel } from "./classes/panel";
 import { CrowdWidgetScreenRecorder } from "./classes/screen-recorder";
-import { CrowdElementIdPrefix } from "./constant";
+import { CrowdElementIdPrefix } from "../../constant";
 
 import { widgetElementsReferences, widgetFrameEndpoint } from "./utils";
 import { generateWidgetUserIDAndStore } from "./utils/user-session";
