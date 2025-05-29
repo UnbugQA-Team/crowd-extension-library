@@ -1,14 +1,23 @@
+import { ignoredCrowdUnmoderatedTestName } from "../../../constant";
 import {
-  PromptReshowOptions,
-  checkPageCompabilityTargetedPages,
+  DeviceSupported,
+  PromptDisplayRule,
+} from "../../../model/userTest-prompt";
+import store from "../../../store";
+import {
+  checkPageCompatibilityTargetedPages,
   getDeviceType,
-} from "../../utils";
-import { DeviceSupported, PromptDisplayRule } from "../model";
+  unmoderatedTestBaseUrl,
+  urlPathQuery,
+} from "../../../utils";
+import { elementSelector } from "../../../utils/dom_utils";
 
-export const unmoderatedTestPromptPrefix = "unmoderated-test";
-export const ignoredCrowdUmoderatedTestName = "crowd-ignored-unmoderated-test";
-export const answeredCrowdUmoderatedTestName =
-  "crowd-answered-unmoderated-test";
+export const PromptReshowOptions = [
+  { label: "Do not reshow", value: "0_hours" },
+  { label: "Reshow after 24 hours", value: "24_hours" },
+  { label: "Reshow after 3 days", value: "72_hours" },
+  { label: "Reshow after 1 week", value: "168_hours" },
+];
 
 /**
  * @method storeUnmoderatedTestId
@@ -62,7 +71,7 @@ export const storeIgnoredUnmoderatedTestId = (
   value: string,
   cookieLifetime: number
 ) => {
-  const cookieName = `${ignoredCrowdUmoderatedTestName}-${new Date().getTime()}`;
+  const cookieName = `${ignoredCrowdUnmoderatedTestName}-${new Date().getTime()}`;
   // Calculate the expiration date for 4 hours from now
   const expirationDate = new Date();
   expirationDate.setTime(
@@ -74,7 +83,7 @@ export const storeIgnoredUnmoderatedTestId = (
   document.cookie = cookieItem;
 };
 export const getAllIgnoredUnmoderatedTestId = () => {
-  const regex = new RegExp(`^${ignoredCrowdUmoderatedTestName}`);
+  const regex = new RegExp(`^${ignoredCrowdUnmoderatedTestName}`);
   const cookies = document.cookie;
 
   // Parse the cookie string to find the item
@@ -105,7 +114,76 @@ export const getPeriodToReshowPrompt = (value: string) => {
   }
 };
 
-const checkDeviceCompabilityForPrompt = (supportedDevices: DeviceSupported) => {
+/**
+ * Retrieves references to various widget elements.
+ *
+ * @returns {Object} Object containing references to widget elements
+ * @throws {Error} If the widget container ID, panel frame wrapper ID, panel frame ID, launcher frame ID,
+ * controller frame ID, or controller frame wrapper ID is not found in the store.
+ */
+export const userTestPromptElementsReferences = (
+  workspaceId: string
+): {
+  parentWrapper: HTMLDivElement;
+  panelContainerElement: HTMLDivElement;
+  panelIframe: HTMLIFrameElement;
+} => {
+  const promptParentContainerId: string =
+    store.modules.userTestPrompt.state.userTestPromptContainerState[workspaceId]
+      .promptParentContainerId;
+  const promptContainerId: string =
+    store.modules.userTestPrompt.state.userTestPromptContainerState[workspaceId]
+      .promptContainerId;
+  const panelFrameWrapperId: string =
+    store.modules.userTestPrompt.state.userTestPromptContainerState[workspaceId]
+      .panelFrameWrapperId;
+
+  const parentWrapper: HTMLDivElement = elementSelector(
+    "id",
+    promptParentContainerId
+  ) as HTMLDivElement;
+  if (!parentWrapper) {
+    throw new Error(`Element with ID "${promptParentContainerId}" not found`);
+  }
+
+  const panelContainerElement: HTMLDivElement = elementSelector(
+    "id",
+    promptContainerId
+  ) as HTMLDivElement;
+  if (!panelContainerElement) {
+    throw new Error(`Element with ID "${promptContainerId}" not found`);
+  }
+
+  const panelIframe: HTMLIFrameElement = elementSelector(
+    "id",
+    panelFrameWrapperId
+  ) as HTMLIFrameElement;
+  if (!panelIframe) {
+    throw new Error(`Element with ID "${panelFrameWrapperId}" not found`);
+  }
+
+  return {
+    parentWrapper,
+    panelContainerElement,
+    panelIframe,
+  };
+};
+
+export const userTestPromptFrameEndpoint = (
+  integrationToken: string
+): {
+  panelEndpoint: string;
+} => {
+  return {
+    panelEndpoint: `${unmoderatedTestBaseUrl}/${urlPathQuery(
+      integrationToken
+    )}`,
+  };
+};
+
+const checkDeviceCompatibilityForPrompt = (
+  supportedDevices: DeviceSupported
+) => {
   const visitorsDeviceType = getDeviceType();
   return (
     (visitorsDeviceType === "Mobile" && supportedDevices.mobile) ||
@@ -114,7 +192,7 @@ const checkDeviceCompabilityForPrompt = (supportedDevices: DeviceSupported) => {
   );
 };
 
-export const checkDeviceAndPageCompability = async (
+export const checkDeviceAndPageCompatibility = async (
   data: PromptDisplayRule
 ) => {
   if (data.visibilityOption === "ALLPAGES") {
@@ -122,15 +200,15 @@ export const checkDeviceAndPageCompability = async (
       position: data.promptPosition,
     };
   } else if (data.visibilityOption === "SPECIFICPAGES") {
-    const pageUrlCompability = data.targetPages.filter((item) =>
-      checkPageCompabilityTargetedPages(item.optionName, item.optionValue)
+    const pageUrlCompatibility = data.targetPages.filter((item) =>
+      checkPageCompatibilityTargetedPages(item.optionName, item.optionValue)
     );
 
     // console.log(pageUrlCompability);
 
     if (
-      checkDeviceCompabilityForPrompt(data.deviceSupported) &&
-      pageUrlCompability.length > 0
+      checkDeviceCompatibilityForPrompt(data.deviceSupported) &&
+      pageUrlCompatibility.length > 0
     ) {
       return {
         position: data.promptPosition,

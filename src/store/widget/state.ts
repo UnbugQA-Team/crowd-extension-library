@@ -1,7 +1,7 @@
 import { proxy } from "valtio";
 import { WidgetDisplayRules } from "../../model/widget";
 
-export interface WidgetFeedbackState {
+interface WidgetContainerState {
   isElementsMounted: boolean;
   isPanelVisible: boolean;
   isLauncherVisible: boolean;
@@ -20,32 +20,17 @@ export interface WidgetFeedbackState {
   controllerFrameWrapperId: string;
   controllerFrameId: string;
   screenRecordPlayerFrameId: string;
+  panelCloseButtonId: string;
 
   widgetDisplayRule: WidgetDisplayRules | null;
 }
 
+export interface WidgetFeedbackState {
+  widgetContainerState: { [key: string]: WidgetContainerState };
+}
+
 export const state: WidgetFeedbackState = proxy({
-  isElementsMounted: false,
-  isPanelVisible: false,
-  isLauncherVisible: false,
-  isControllerVisible: false,
-  isRecordPlayerVisible: false,
-  shouldShowLauncher: false,
-
-  isLauncherFrameLoaded: false,
-  isPanelFrameLoaded: false,
-  isControllerFrameLoaded: false,
-
-  /* Ids for the div container and the iframes */
-  widgetContainerId: "",
-  panelFrameWrapperId: "",
-  panelFrameId: "",
-  launcherFrameId: "",
-  controllerFrameWrapperId: "",
-  controllerFrameId: "",
-  screenRecordPlayerFrameId: "",
-
-  widgetDisplayRule: null,
+  widgetContainerState: {},
 });
 
 export default state;
