@@ -1,11 +1,12 @@
 import { ActivatedWidgetResponse } from "../model/widget";
-
-const BASE_URL = "https://api.stagingv2.crowdapp.io/api/v1";
+import { extensionApiUrl } from "../utils";
 
 export const fetchActivatedWidget = async (
   workspaceId: string
 ): Promise<ActivatedWidgetResponse> => {
-  const response = await fetch(`${BASE_URL}/active-widgets/${workspaceId}`);
+  const response = await fetch(
+    `${extensionApiUrl}/active-widgets/${workspaceId}`
+  );
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
   }
