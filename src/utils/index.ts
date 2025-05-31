@@ -2,6 +2,9 @@ const devCrowdOrigin = "http://localhost:2222";
 const stagingCrowdOrigin = "https://staging.extension.crowdapp.io";
 const prodCrowdOrigin = "https://extension.crowdapp.io";
 
+const apiUrlProd = "https://api.app.crowdapp.io/api/v1";
+const apiUrlDev = "https://api.stagingv2.crowdapp.io/api/v1";
+
 export const getExtensionOriginEnvironment = (): string => {
   if ((window as any).CrowdApp && (window as any).CrowdApp.environment) {
     const crowd_environment = (window as any).CrowdApp.environment;
@@ -25,11 +28,24 @@ const getExtensionEnvironmentUrl = () => {
   }
 };
 
+const getExtensionApiUrl = () => {
+  if (getExtensionOriginEnvironment() === "production") {
+    return apiUrlProd;
+  } else if (getExtensionOriginEnvironment() === "staging") {
+    return apiUrlDev;
+  } else if (getExtensionOriginEnvironment() === "development") {
+    return apiUrlDev;
+  } else {
+    return apiUrlProd;
+  }
+};
+
 /* import.meta.env.DEV
   ? devCrowdOrigin
   : */
 
 export const extensionBaseOriginUrl: string = getExtensionEnvironmentUrl();
+export const extensionApiUrl: string = getExtensionApiUrl();
 
 export const unmoderatedTestBaseUrl = `${extensionBaseOriginUrl}/extension/unmoderated-test`;
 export const widgetBaseUrl = `${extensionBaseOriginUrl}/extension/widget`;
